@@ -21,7 +21,7 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.discovery import (
+from our_federation.discovery import (
     bootstrap_federation,
     bootstrap_federation_sync,
     check_all_nodes_health,
@@ -40,8 +40,8 @@ from oro_federation.discovery import (
     register_node,
     update_node_status,
 )
-from oro_federation.identity import DIDDocument
-from oro_federation.models import (
+from our_federation.identity import DIDDocument
+from our_federation.models import (
     NodeStatus,
     TrustPhase,
 )
@@ -68,7 +68,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True) -> Generator:
         yield mock_cursor
 
-    with patch("oro_federation.discovery.get_cursor", _mock_get_cursor):
+    with patch("our_federation.discovery.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 
@@ -165,7 +165,7 @@ class TestDiscoverNode:
         did = "did:vkb:web:test.example.com"
         did_doc = sample_did_document(did=did)
 
-        with patch("oro_federation.discovery.resolve_did") as mock_resolve:
+        with patch("our_federation.discovery.resolve_did") as mock_resolve:
             mock_resolve.return_value = did_doc
 
             result = await discover_node(did)
@@ -179,7 +179,7 @@ class TestDiscoverNode:
         url = "https://test.example.com"
         did_doc = sample_did_document()
 
-        with patch("oro_federation.discovery._fetch_node_metadata") as mock_fetch:
+        with patch("our_federation.discovery._fetch_node_metadata") as mock_fetch:
             mock_fetch.return_value = did_doc
 
             result = await discover_node(url)
@@ -193,7 +193,7 @@ class TestDiscoverNode:
         url = "test.example.com"
         did_doc = sample_did_document()
 
-        with patch("oro_federation.discovery._fetch_node_metadata") as mock_fetch:
+        with patch("our_federation.discovery._fetch_node_metadata") as mock_fetch:
             mock_fetch.return_value = did_doc
 
             await discover_node(url)
@@ -210,7 +210,7 @@ class TestDiscoverNodeSync:
         """Test synchronous node discovery."""
         did_doc = sample_did_document()
 
-        with patch("oro_federation.discovery.discover_node", new_callable=AsyncMock) as mock_discover:
+        with patch("our_federation.discovery.discover_node", new_callable=AsyncMock) as mock_discover:
             mock_discover.return_value = did_doc
 
             result = discover_node_sync("https://test.example.com")
@@ -219,7 +219,7 @@ class TestDiscoverNodeSync:
 
     def test_discover_node_sync_error(self):
         """Test synchronous discovery with error."""
-        with patch("oro_federation.discovery.discover_node", new_callable=AsyncMock) as mock_discover:
+        with patch("our_federation.discovery.discover_node", new_callable=AsyncMock) as mock_discover:
             mock_discover.side_effect = Exception("Network error")
 
             result = discover_node_sync("https://test.example.com")
@@ -395,7 +395,7 @@ class TestMarkNodeActive:
         """Test marking node as active."""
         node_id = uuid4()
 
-        with patch("oro_federation.discovery.update_node_status") as mock_update:
+        with patch("our_federation.discovery.update_node_status") as mock_update:
             mock_update.return_value = True
 
             result = mark_node_active(node_id)
@@ -411,7 +411,7 @@ class TestMarkNodeUnreachable:
         """Test marking node as unreachable."""
         node_id = uuid4()
 
-        with patch("oro_federation.discovery.update_node_status") as mock_update:
+        with patch("our_federation.discovery.update_node_status") as mock_update:
             mock_update.return_value = True
 
             result = mark_node_unreachable(node_id)
@@ -434,8 +434,8 @@ class TestBootstrapFederation:
         did_docs = [sample_did_document(did=f"did:vkb:web:node{i}.example.com") for i in range(3)]
 
         with (
-            patch("oro_federation.discovery.discover_node", new_callable=AsyncMock) as mock_discover,
-            patch("oro_federation.discovery.register_node") as mock_register,
+            patch("our_federation.discovery.discover_node", new_callable=AsyncMock) as mock_discover,
+            patch("our_federation.discovery.register_node") as mock_register,
         ):
             # Return different docs for each call
             mock_discover.side_effect = did_docs
@@ -457,8 +457,8 @@ class TestBootstrapFederation:
         did_doc = sample_did_document()
 
         with (
-            patch("oro_federation.discovery.discover_node", new_callable=AsyncMock) as mock_discover,
-            patch("oro_federation.discovery.register_node") as mock_register,
+            patch("our_federation.discovery.discover_node", new_callable=AsyncMock) as mock_discover,
+            patch("our_federation.discovery.register_node") as mock_register,
         ):
             # First succeeds, second fails (returns None)
             mock_discover.side_effect = [did_doc, None]
@@ -483,7 +483,7 @@ class TestBootstrapFederationSync:
         did_doc = sample_did_document()
         node = MagicMock(did=did_doc.id)
 
-        with patch("oro_federation.discovery.bootstrap_federation", new_callable=AsyncMock) as mock_bootstrap:
+        with patch("our_federation.discovery.bootstrap_federation", new_callable=AsyncMock) as mock_bootstrap:
             mock_bootstrap.return_value = [node]
 
             result = bootstrap_federation_sync(["https://test.example.com"])
@@ -492,7 +492,7 @@ class TestBootstrapFederationSync:
 
     def test_bootstrap_sync_error(self):
         """Test synchronous bootstrap with error."""
-        with patch("oro_federation.discovery.bootstrap_federation", new_callable=AsyncMock) as mock_bootstrap:
+        with patch("our_federation.discovery.bootstrap_federation", new_callable=AsyncMock) as mock_bootstrap:
             mock_bootstrap.side_effect = Exception("Network error")
 
             result = bootstrap_federation_sync(["https://test.example.com"])
@@ -518,8 +518,8 @@ class TestCheckNodeHealth:
         node.federation_endpoint = "https://test.example.com/federation"
 
         with (
-            patch("oro_federation.discovery._fetch_node_metadata") as mock_fetch,
-            patch("oro_federation.discovery.get_cursor"),
+            patch("our_federation.discovery._fetch_node_metadata") as mock_fetch,
+            patch("our_federation.discovery.get_cursor"),
         ):
             mock_fetch.return_value = did_doc
 
@@ -547,8 +547,8 @@ class TestCheckNodeHealth:
         node.federation_endpoint = "https://test.example.com/federation"
 
         with (
-            patch("oro_federation.discovery._fetch_node_metadata") as mock_fetch,
-            patch("oro_federation.discovery.mark_node_unreachable") as mock_mark,
+            patch("our_federation.discovery._fetch_node_metadata") as mock_fetch,
+            patch("our_federation.discovery.mark_node_unreachable") as mock_mark,
         ):
             mock_fetch.return_value = did_doc
             mock_mark.return_value = True
@@ -568,7 +568,7 @@ class TestCheckAllNodesHealth:
         rows = [sample_node_row(id=uuid4(), did=f"did:vkb:web:node{i}.example.com") for i in range(2)]
         mock_get_cursor.fetchall.return_value = rows
 
-        with patch("oro_federation.discovery.check_node_health") as mock_check:
+        with patch("our_federation.discovery.check_node_health") as mock_check:
             mock_check.return_value = True
 
             results = await check_all_nodes_health()
@@ -647,7 +647,7 @@ class TestListActiveNodes:
 
     def test_list_active(self):
         """Test listing active nodes."""
-        with patch("oro_federation.discovery.list_nodes") as mock_list:
+        with patch("our_federation.discovery.list_nodes") as mock_list:
             mock_list.return_value = [MagicMock(), MagicMock()]
 
             result = list_active_nodes()

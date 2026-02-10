@@ -14,7 +14,7 @@ from datetime import datetime
 from typing import Any
 from uuid import uuid4
 
-from oro_compliance.pii_scanner import check_federation_allowed
+from our_compliance.pii_scanner import check_federation_allowed
 from starlette.applications import Starlette
 from starlette.requests import Request
 from starlette.responses import JSONResponse

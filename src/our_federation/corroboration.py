@@ -13,7 +13,7 @@ from dataclasses import dataclass
 from typing import Any
 from uuid import UUID
 
-from oro_db import get_cursor
+from our_db import get_cursor
 
 logger = logging.getLogger(__name__)
 
@@ -97,11 +97,11 @@ def check_corroboration(
     try:
         # Generate embedding if not provided
         if content_embedding is None:
-            from oro_embeddings.service import generate_embedding, vector_to_pgvector
+            from our_embeddings.service import generate_embedding, vector_to_pgvector
 
             content_embedding = generate_embedding(content)
         else:
-            from oro_embeddings.service import vector_to_pgvector
+            from our_embeddings.service import vector_to_pgvector
 
         query_vector = vector_to_pgvector(content_embedding)
 

@@ -17,7 +17,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 import pytest
 from starlette.testclient import TestClient
 
-from oro_federation.server import (
+from our_federation.server import (
     FederationNode,
     LocalBelief,
     NodeIdentity,
@@ -158,12 +158,12 @@ class TestFederationNodeInit:
 
     def test_node_creation_generates_keypair(self):
         """Node generates keypair if not provided."""
-        with patch("oro_federation.server.generate_keypair") as mock_gen:
+        with patch("our_federation.server.generate_keypair") as mock_gen:
             mock_keypair = MagicMock()
             mock_keypair.public_key_multibase = "z6MkGenerated"
             mock_gen.return_value = mock_keypair
 
-            with patch("oro_federation.server.create_key_did") as mock_did:
+            with patch("our_federation.server.create_key_did") as mock_did:
                 mock_did_obj = MagicMock()
                 mock_did_obj.full = "did:vkb:key:z6MkGenerated"
                 mock_did.return_value = mock_did_obj
@@ -180,7 +180,7 @@ class TestFederationNodeInit:
         mock_keypair = MagicMock()
         mock_keypair.public_key_multibase = "z6MkProvided"
 
-        with patch("oro_federation.server.create_key_did") as mock_did:
+        with patch("our_federation.server.create_key_did") as mock_did:
             mock_did_obj = MagicMock()
             mock_did_obj.full = "did:vkb:key:z6MkProvided"
             mock_did.return_value = mock_did_obj
@@ -195,8 +195,8 @@ class TestFederationNodeInit:
 
     def test_node_has_empty_stores(self):
         """New node has empty peer and belief stores."""
-        with patch("oro_federation.server.generate_keypair"):
-            with patch("oro_federation.server.create_key_did") as mock_did:
+        with patch("our_federation.server.generate_keypair"):
+            with patch("our_federation.server.create_key_did") as mock_did:
                 mock_did_obj = MagicMock()
                 mock_did_obj.full = "did:test"
                 mock_did.return_value = mock_did_obj
@@ -218,13 +218,13 @@ class TestFederationEndpoints:
     @pytest.fixture
     def node(self):
         """Create a test federation node."""
-        with patch("oro_federation.server.generate_keypair") as mock_gen:
+        with patch("our_federation.server.generate_keypair") as mock_gen:
             mock_keypair = MagicMock()
             mock_keypair.public_key_multibase = "z6MkTestNode"
             mock_keypair.private_key_bytes = b"test_private_key"
             mock_gen.return_value = mock_keypair
 
-            with patch("oro_federation.server.create_key_did") as mock_did:
+            with patch("our_federation.server.create_key_did") as mock_did:
                 mock_did_obj = MagicMock()
                 mock_did_obj.full = "did:vkb:key:z6MkTestNode"
                 mock_did.return_value = mock_did_obj
@@ -310,7 +310,7 @@ class TestFederationEndpoints:
             "sender_did": peer_did,
         }
 
-        with patch("oro_federation.server.verify_belief_signature", return_value=True):
+        with patch("our_federation.server.verify_belief_signature", return_value=True):
             response = client.post("/federation/share", json=payload)
 
         assert response.status_code == 200
@@ -356,7 +356,7 @@ class TestFederationEndpoints:
             "sender_did": peer_did,
         }
 
-        with patch("oro_federation.server.verify_belief_signature", return_value=False):
+        with patch("our_federation.server.verify_belief_signature", return_value=False):
             response = client.post("/federation/share", json=payload)
 
         assert response.status_code == 403
@@ -481,13 +481,13 @@ class TestFederationNodeClientMethods:
     @pytest.fixture
     def node(self):
         """Create a test federation node."""
-        with patch("oro_federation.server.generate_keypair") as mock_gen:
+        with patch("our_federation.server.generate_keypair") as mock_gen:
             mock_keypair = MagicMock()
             mock_keypair.public_key_multibase = "z6MkClient"
             mock_keypair.private_key_bytes = b"private_key_bytes"
             mock_gen.return_value = mock_keypair
 
-            with patch("oro_federation.server.create_key_did") as mock_did:
+            with patch("our_federation.server.create_key_did") as mock_did:
                 mock_did_obj = MagicMock()
                 mock_did_obj.full = "did:vkb:key:z6MkClient"
                 mock_did.return_value = mock_did_obj
@@ -562,11 +562,11 @@ class TestFederationNodeClientMethods:
 
         with patch("aiohttp.ClientSession", return_value=mock_session_ctx):
             with patch(
-                "oro_federation.server.sign_belief_content",
+                "our_federation.server.sign_belief_content",
                 return_value="signature",
             ):
                 with patch(
-                    "oro_federation.server.check_federation_allowed",
+                    "our_federation.server.check_federation_allowed",
                     return_value=(True, MagicMock()),
                 ):
                     result = await node.share_belief(
@@ -592,7 +592,7 @@ class TestFederationNodeClientMethods:
         mock_scan_result.to_dict.return_value = {"level": "L3", "findings": ["email"]}
 
         with patch(
-            "oro_federation.server.check_federation_allowed",
+            "our_federation.server.check_federation_allowed",
             return_value=(False, mock_scan_result),
         ):
             result = await node.share_belief(
@@ -629,9 +629,9 @@ class TestFederationNodeClientMethods:
         mock_session_ctx.__aexit__ = AsyncMock(return_value=None)
 
         with patch("aiohttp.ClientSession", return_value=mock_session_ctx):
-            with patch("oro_federation.server.sign_belief_content", return_value="sig"):
+            with patch("our_federation.server.sign_belief_content", return_value="sig"):
                 with patch(
-                    "oro_federation.server.check_federation_allowed",
+                    "our_federation.server.check_federation_allowed",
                     return_value=(True, MagicMock()),
                 ):
                     result = await node.share_belief(
@@ -719,12 +719,12 @@ class TestCreateNode:
     @pytest.mark.asyncio
     async def test_create_node(self):
         """Create a node using factory function."""
-        with patch("oro_federation.server.generate_keypair") as mock_gen:
+        with patch("our_federation.server.generate_keypair") as mock_gen:
             mock_keypair = MagicMock()
             mock_keypair.public_key_multibase = "z6MkFactory"
             mock_gen.return_value = mock_keypair
 
-            with patch("oro_federation.server.create_key_did") as mock_did:
+            with patch("our_federation.server.create_key_did") as mock_did:
                 mock_did_obj = MagicMock()
                 mock_did_obj.full = "did:vkb:key:z6MkFactory"
                 mock_did.return_value = mock_did_obj

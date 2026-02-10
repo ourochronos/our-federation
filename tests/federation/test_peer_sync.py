@@ -16,7 +16,7 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.peer_sync import (
+from our_federation.peer_sync import (
     ExportedBelief,
     ExportPackage,
     TrustRegistry,
@@ -205,8 +205,8 @@ class TestExportPackage:
 class TestExportBeliefs:
     """Test belief export functionality."""
 
-    @patch("oro_db.get_cursor")
-    @patch("oro_federation.peer_sync.get_trust_registry")
+    @patch("our_db.get_cursor")
+    @patch("our_federation.peer_sync.get_trust_registry")
     def test_export_beliefs_basic(self, mock_registry, mock_cursor):
         """Export returns properly formatted package."""
         # Mock registry
@@ -250,8 +250,8 @@ class TestExportBeliefs:
 class TestImportBeliefs:
     """Test belief import functionality."""
 
-    @patch("oro_db.get_cursor")
-    @patch("oro_federation.peer_sync.get_trust_registry")
+    @patch("our_db.get_cursor")
+    @patch("our_federation.peer_sync.get_trust_registry")
     def test_import_applies_trust_weighting(self, mock_registry, mock_cursor):
         """Imported beliefs have confidence weighted by trust."""
         # Mock registry with 50% trust
@@ -298,8 +298,8 @@ class TestImportBeliefs:
         assert inserted_confidence["_original_overall"] == 0.8
         assert inserted_confidence["_peer_trust"] == 0.5
 
-    @patch("oro_db.get_cursor")
-    @patch("oro_federation.peer_sync.get_trust_registry")
+    @patch("our_db.get_cursor")
+    @patch("our_federation.peer_sync.get_trust_registry")
     def test_import_skips_duplicates(self, mock_registry, mock_cursor):
         """Import skips beliefs that already exist."""
         mock_reg = MagicMock()
@@ -329,7 +329,7 @@ class TestImportBeliefs:
         assert result.imported == 0
         assert result.skipped_duplicate == 1
 
-    @patch("oro_federation.peer_sync.get_trust_registry")
+    @patch("our_federation.peer_sync.get_trust_registry")
     def test_import_rejects_untrusted(self, mock_registry):
         """Import rejects beliefs from peers with no trust."""
         mock_reg = MagicMock()
@@ -362,7 +362,7 @@ class TestFederatedQuery:
     """Test federated query with source attribution."""
 
     @patch("openai.OpenAI")
-    @patch("oro_db.get_cursor")
+    @patch("our_db.get_cursor")
     def test_query_returns_source_attribution(self, mock_cursor, mock_openai):
         """Query results include source attribution."""
         mock_cur = MagicMock()

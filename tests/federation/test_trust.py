@@ -18,14 +18,14 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.models import (
+from our_federation.models import (
     AnnotationType,
     NodeTrust,
     ThreatLevel,
     TrustPhase,
     TrustPreference,
 )
-from oro_federation.trust import (
+from our_federation.trust import (
     SIGNAL_WEIGHTS,
     TrustManager,
     TrustSignal,
@@ -58,7 +58,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True) -> Generator:
         yield mock_cursor
 
-    with patch("oro_federation.trust.get_cursor", _mock_get_cursor):
+    with patch("our_federation.trust.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 
@@ -199,9 +199,9 @@ class TestTrustManagerInit:
     def test_trust_manager_init_default(self):
         """Test TrustManager with default parameters."""
         with (
-            patch("oro_federation.trust.TrustRegistry") as MockRegistry,  # noqa: N806
-            patch("oro_federation.trust.ThreatDetector") as MockDetector,  # noqa: N806
-            patch("oro_federation.trust.TrustPolicy") as MockPolicy,  # noqa: N806
+            patch("our_federation.trust.TrustRegistry") as MockRegistry,  # noqa: N806
+            patch("our_federation.trust.ThreatDetector") as MockDetector,  # noqa: N806
+            patch("our_federation.trust.TrustPolicy") as MockPolicy,  # noqa: N806
         ):
             manager = TrustManager()
 
@@ -214,9 +214,9 @@ class TestTrustManagerInit:
     def test_trust_manager_init_custom(self):
         """Test TrustManager with custom parameters."""
         with (
-            patch("oro_federation.trust.TrustRegistry"),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry"),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager(
                 decay_half_life_days=60,
@@ -237,9 +237,9 @@ class TestTrustManagerDelegation:
         mock_registry.get_node_trust.return_value = expected_trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.get_node_trust(node_id)
@@ -253,9 +253,9 @@ class TestTrustManagerDelegation:
         mock_registry.get_user_trust_preference.return_value = None
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.get_user_trust_preference(node_id)
@@ -269,9 +269,9 @@ class TestTrustManagerDelegation:
         mock_policy.get_effective_trust.return_value = 0.75
 
         with (
-            patch("oro_federation.trust.TrustRegistry"),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy", return_value=mock_policy),
+            patch("our_federation.trust.TrustRegistry"),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy", return_value=mock_policy),
         ):
             manager = TrustManager()
             result = manager.get_effective_trust(node_id, domain="science")
@@ -288,12 +288,12 @@ class TestTrustManagerDelegation:
         )
 
         with (
-            patch("oro_federation.trust.TrustRegistry"),
+            patch("our_federation.trust.TrustRegistry"),
             patch(
-                "oro_federation.trust.ThreatDetector",
+                "our_federation.trust.ThreatDetector",
                 return_value=mock_threat_detector,
             ),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             level, assessment = manager.assess_threat_level(node_id)
@@ -307,12 +307,12 @@ class TestTrustManagerDelegation:
         mock_threat_detector.apply_threat_response.return_value = True
 
         with (
-            patch("oro_federation.trust.TrustRegistry"),
+            patch("our_federation.trust.TrustRegistry"),
             patch(
-                "oro_federation.trust.ThreatDetector",
+                "our_federation.trust.ThreatDetector",
                 return_value=mock_threat_detector,
             ),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.apply_threat_response(node_id, ThreatLevel.MEDIUM, {"threat_score": 0.45})
@@ -326,9 +326,9 @@ class TestTrustManagerDelegation:
         mock_policy.check_phase_transition.return_value = TrustPhase.CONTRIBUTOR
 
         with (
-            patch("oro_federation.trust.TrustRegistry"),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy", return_value=mock_policy),
+            patch("our_federation.trust.TrustRegistry"),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy", return_value=mock_policy),
         ):
             manager = TrustManager()
             result = manager.check_phase_transition(node_id)
@@ -353,9 +353,9 @@ class TestProcessSignal:
         mock_registry.save_node_trust.return_value = trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             signal = TrustSignal(node_id=node_id, signal_type="corroboration")
@@ -373,9 +373,9 @@ class TestProcessSignal:
         mock_registry.save_node_trust.return_value = trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             signal = TrustSignal(node_id=node_id, signal_type="dispute", value=1.0)
@@ -392,9 +392,9 @@ class TestProcessSignal:
         mock_registry.save_node_trust.return_value = trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             signal = TrustSignal(node_id=node_id, signal_type="endorsement")
@@ -411,9 +411,9 @@ class TestProcessSignal:
         mock_registry.save_node_trust.return_value = trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             signal = TrustSignal(node_id=node_id, signal_type="sync_success")
@@ -428,9 +428,9 @@ class TestProcessSignal:
         mock_registry.get_node_trust.return_value = None
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             signal = TrustSignal(node_id=node_id, signal_type="corroboration")
@@ -446,9 +446,9 @@ class TestProcessSignal:
         mock_registry.save_node_trust.return_value = trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             signal = TrustSignal(node_id=node_id, signal_type="corroboration", domain="science")
@@ -470,9 +470,9 @@ class TestProcessCorroboration:
         mock_registry.save_node_trust.return_value = trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.process_corroboration(node_id)
@@ -488,9 +488,9 @@ class TestProcessCorroboration:
         mock_registry.save_node_trust.return_value = trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.process_corroboration(node_id, belief_id=belief_id)
@@ -509,9 +509,9 @@ class TestProcessDispute:
         mock_registry.save_node_trust.return_value = trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.process_dispute(node_id)
@@ -526,9 +526,9 @@ class TestProcessDispute:
         mock_registry.save_node_trust.return_value = trust
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.process_dispute(node_id, severity=2.0)
@@ -549,9 +549,9 @@ class TestProcessEndorsement:
         mock_policy.get_effective_trust.return_value = 0.6
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy", return_value=mock_policy),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy", return_value=mock_policy),
         ):
             manager = TrustManager()
             result = manager.process_endorsement(subject_id, endorser_id)
@@ -574,9 +574,9 @@ class TestUserPreferences:
         mock_registry.set_user_preference.return_value = mock_pref
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.set_user_preference(node_id, TrustPreference.ELEVATED, reason="Trusted source")
@@ -591,9 +591,9 @@ class TestUserPreferences:
         mock_registry.set_user_preference.return_value = mock_pref
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             manager.block_node(node_id, reason="Suspicious")
@@ -609,9 +609,9 @@ class TestUserPreferences:
         mock_registry.set_user_preference.return_value = mock_pref
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             manager.unblock_node(node_id)
@@ -635,9 +635,9 @@ class TestBeliefAnnotations:
         mock_registry.annotate_belief.return_value = mock_annotation
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.annotate_belief(belief_id, AnnotationType.CORROBORATION, confidence_delta=0.05)
@@ -651,9 +651,9 @@ class TestBeliefAnnotations:
         mock_registry.get_belief_trust_adjustments.return_value = 0.15
 
         with (
-            patch("oro_federation.trust.TrustRegistry", return_value=mock_registry),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry", return_value=mock_registry),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = TrustManager()
             result = manager.get_belief_trust_adjustments(belief_id)
@@ -672,14 +672,14 @@ class TestGetTrustManager:
     def test_get_trust_manager_returns_instance(self):
         """Test that get_trust_manager returns a TrustManager."""
         # Reset the global manager
-        import oro_federation.trust
+        import our_federation.trust
 
-        oro_federation.trust._default_manager = None
+        our_federation.trust._default_manager = None
 
         with (
-            patch("oro_federation.trust.TrustRegistry"),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry"),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager = get_trust_manager()
 
@@ -688,14 +688,14 @@ class TestGetTrustManager:
 
     def test_get_trust_manager_singleton(self):
         """Test that get_trust_manager returns same instance."""
-        import oro_federation.trust
+        import our_federation.trust
 
-        oro_federation.trust._default_manager = None
+        our_federation.trust._default_manager = None
 
         with (
-            patch("oro_federation.trust.TrustRegistry"),
-            patch("oro_federation.trust.ThreatDetector"),
-            patch("oro_federation.trust.TrustPolicy"),
+            patch("our_federation.trust.TrustRegistry"),
+            patch("our_federation.trust.ThreatDetector"),
+            patch("our_federation.trust.TrustPolicy"),
         ):
             manager1 = get_trust_manager()
             manager2 = get_trust_manager()
@@ -710,7 +710,7 @@ class TestModuleLevelFunctions:
         """Test module-level get_effective_trust."""
         node_id = uuid4()
 
-        with patch("oro_federation.trust.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.trust.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_mgr.get_effective_trust.return_value = 0.7
             mock_get_mgr.return_value = mock_mgr
@@ -724,7 +724,7 @@ class TestModuleLevelFunctions:
         """Test module-level process_corroboration."""
         node_id = uuid4()
 
-        with patch("oro_federation.trust.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.trust.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_trust = MagicMock()
             mock_mgr.process_corroboration.return_value = mock_trust
@@ -739,7 +739,7 @@ class TestModuleLevelFunctions:
         """Test module-level process_dispute."""
         node_id = uuid4()
 
-        with patch("oro_federation.trust.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.trust.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_trust = MagicMock()
             mock_mgr.process_dispute.return_value = mock_trust
@@ -754,7 +754,7 @@ class TestModuleLevelFunctions:
         """Test module-level assess_and_respond_to_threat."""
         node_id = uuid4()
 
-        with patch("oro_federation.trust.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.trust.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_mgr.assess_threat_level.return_value = (
                 ThreatLevel.MEDIUM,

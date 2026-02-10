@@ -4,7 +4,7 @@ from unittest.mock import patch
 
 import pytest
 
-from oro_federation.sync import TLSRequiredError, validate_endpoint_tls
+from our_federation.sync import TLSRequiredError, validate_endpoint_tls
 
 
 class TestTLSValidation:
@@ -12,14 +12,14 @@ class TestTLSValidation:
 
     def test_https_allowed_when_tls_required(self):
         """HTTPS endpoints should pass when TLS is required."""
-        with patch("oro_federation.sync.get_config") as mock:
+        with patch("our_federation.sync.get_config") as mock:
             mock.return_value.require_tls = True
             # Should not raise
             validate_endpoint_tls("https://example.com/api")
 
     def test_http_rejected_when_tls_required(self):
         """HTTP endpoints should be rejected when TLS is required."""
-        with patch("oro_federation.sync.get_config") as mock:
+        with patch("our_federation.sync.get_config") as mock:
             mock.return_value.require_tls = True
             with pytest.raises(TLSRequiredError) as exc_info:
                 validate_endpoint_tls("http://example.com/api")
@@ -27,14 +27,14 @@ class TestTLSValidation:
 
     def test_http_allowed_when_tls_not_required(self):
         """HTTP endpoints should be allowed when TLS is not required."""
-        with patch("oro_federation.sync.get_config") as mock:
+        with patch("our_federation.sync.get_config") as mock:
             mock.return_value.require_tls = False
             # Should not raise
             validate_endpoint_tls("http://example.com/api")
 
     def test_https_allowed_when_tls_not_required(self):
         """HTTPS endpoints should always be allowed."""
-        with patch("oro_federation.sync.get_config") as mock:
+        with patch("our_federation.sync.get_config") as mock:
             mock.return_value.require_tls = False
             # Should not raise
             validate_endpoint_tls("https://example.com/api")

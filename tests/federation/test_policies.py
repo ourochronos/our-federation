@@ -16,7 +16,7 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.policies import (
+from our_federation.policies import (
     ApprovalStatus,
     Operation,
     PendingApproval,

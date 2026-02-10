@@ -18,7 +18,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from oro_federation.domain_verification import (
+from our_federation.domain_verification import (
     CHALLENGE_PREFIX,
     # Constants
     CHALLENGE_TTL_HOURS,
@@ -56,7 +56,7 @@ from oro_federation.domain_verification import (
     # Batch operations
     verify_multiple_domains,
 )
-from oro_federation.verification import VerificationStatus
+from our_federation.verification import VerificationStatus
 
 # =============================================================================
 # FIXTURES
@@ -104,7 +104,7 @@ def mock_external_client():
 @pytest.fixture(autouse=True)
 def reset_global_stores():
     """Reset global stores before each test."""
-    import oro_federation.domain_verification as dv
+    import our_federation.domain_verification as dv
 
     dv._challenge_store = None
     dv._attestation_store = None
@@ -782,10 +782,10 @@ class TestVerifyDomain:
     @pytest.mark.asyncio
     async def test_verify_domain_via_dns(self, test_domain: str, remote_fed_did: str, local_fed_did: str):
         """Test domain verification via DNS TXT record."""
-        with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+        with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
             mock_dns.return_value = (True, f"valence-federation={remote_fed_did}", None)
 
-            with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+            with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                 mock_did.return_value = (False, None, "Not found")
 
                 result = await verify_domain(
@@ -804,10 +804,10 @@ class TestVerifyDomain:
     @pytest.mark.asyncio
     async def test_verify_domain_via_did_document(self, test_domain: str, remote_fed_did: str, local_fed_did: str):
         """Test domain verification via DID document."""
-        with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+        with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
             mock_dns.return_value = (False, None, "Not found")
 
-            with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+            with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                 mock_did.return_value = (True, f"https://{test_domain}", None)
 
                 result = await verify_domain(
@@ -831,13 +831,13 @@ class TestVerifyDomain:
             attester_did="did:vkb:web:trusted-attester",
         )
 
-        with patch("oro_federation.domain_verification.get_federation_trust") as mock_trust:
+        with patch("our_federation.domain_verification.get_federation_trust") as mock_trust:
             mock_trust.return_value = 0.8  # High trust
 
-            with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+            with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
                 mock_dns.return_value = (False, None, "Not found")
 
-                with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+                with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                     mock_did.return_value = (False, None, "Not found")
 
                     result = await verify_domain(
@@ -854,10 +854,10 @@ class TestVerifyDomain:
     @pytest.mark.asyncio
     async def test_verify_domain_combined_methods(self, test_domain: str, remote_fed_did: str, local_fed_did: str):
         """Test domain verification with multiple methods succeeding."""
-        with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+        with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
             mock_dns.return_value = (True, f"valence-federation={remote_fed_did}", None)
 
-            with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+            with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                 mock_did.return_value = (True, f"https://{test_domain}", None)
 
                 result = await verify_domain(
@@ -878,10 +878,10 @@ class TestVerifyDomain:
     @pytest.mark.asyncio
     async def test_verify_domain_require_all(self, test_domain: str, remote_fed_did: str, local_fed_did: str):
         """Test domain verification requiring all methods to pass."""
-        with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+        with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
             mock_dns.return_value = (True, f"valence-federation={remote_fed_did}", None)
 
-            with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+            with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                 mock_did.return_value = (False, None, "Not found")
 
                 result = await verify_domain(
@@ -902,10 +902,10 @@ class TestVerifyDomain:
     @pytest.mark.asyncio
     async def test_verify_domain_all_fail(self, test_domain: str, remote_fed_did: str, local_fed_did: str):
         """Test domain verification when all methods fail."""
-        with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+        with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
             mock_dns.return_value = (False, None, "DNS error")
 
-            with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+            with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                 mock_did.return_value = (False, None, "DID error")
 
                 result = await verify_domain(
@@ -925,10 +925,10 @@ class TestVerifyDomain:
 
     def test_verify_domain_sync(self, test_domain: str, remote_fed_did: str, local_fed_did: str):
         """Test synchronous domain verification."""
-        with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+        with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
             mock_dns.return_value = (True, f"valence-federation={remote_fed_did}", None)
 
-            with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+            with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                 mock_did.return_value = (False, None, "Not found")
 
                 result = verify_domain_sync(
@@ -1007,10 +1007,10 @@ class TestExternalAuthority:
 
         set_external_client(mock_client)
 
-        with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+        with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
             mock_dns.return_value = (False, None, "Not found")
 
-            with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+            with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                 mock_did.return_value = (False, None, "Not found")
 
                 result = await verify_domain(
@@ -1031,10 +1031,10 @@ class TestExternalAuthority:
 
         set_external_client(mock_client)
 
-        with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+        with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
             mock_dns.return_value = (False, None, "Not found")
 
-            with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+            with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                 mock_did.return_value = (False, None, "Not found")
 
                 result = await verify_domain(
@@ -1064,7 +1064,7 @@ class TestBatchOperations:
             ("domain3.example.com", "did:vkb:web:fed3"),
         ]
 
-        with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+        with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
             # First two succeed, third fails
             mock_dns.side_effect = [
                 (True, "record1", None),
@@ -1072,7 +1072,7 @@ class TestBatchOperations:
                 (False, None, "Error"),
             ]
 
-            with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+            with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                 mock_did.return_value = (False, None, "Not found")
 
                 results = await verify_multiple_domains(
@@ -1199,13 +1199,13 @@ class TestIntegration:
         )
 
         # Step 2: Verify domain via attestation (with mock trust)
-        with patch("oro_federation.domain_verification.get_federation_trust") as mock_trust:
+        with patch("our_federation.domain_verification.get_federation_trust") as mock_trust:
             mock_trust.return_value = 0.9  # High trust
 
-            with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+            with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
                 mock_dns.return_value = (False, None, "Not found")
 
-                with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+                with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                     mock_did.return_value = (False, None, "Not found")
 
                     result = await verify_domain(
@@ -1224,13 +1224,13 @@ class TestIntegration:
         assert revoked is True
 
         # Step 4: Verification should now fail
-        with patch("oro_federation.domain_verification.get_federation_trust") as mock_trust:
+        with patch("our_federation.domain_verification.get_federation_trust") as mock_trust:
             mock_trust.return_value = 0.9
 
-            with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+            with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
                 mock_dns.return_value = (False, None, "Not found")
 
-                with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+                with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                     mock_did.return_value = (False, None, "Not found")
 
                     result = await verify_domain(
@@ -1253,13 +1253,13 @@ class TestIntegration:
             attester_did="did:vkb:web:trusted",
         )
 
-        with patch("oro_federation.domain_verification.get_federation_trust") as mock_trust:
+        with patch("our_federation.domain_verification.get_federation_trust") as mock_trust:
             mock_trust.return_value = 0.8
 
-            with patch("oro_federation.domain_verification.verify_dns_txt_record") as mock_dns:
+            with patch("our_federation.domain_verification.verify_dns_txt_record") as mock_dns:
                 mock_dns.return_value = (False, None, "DNS error")
 
-                with patch("oro_federation.domain_verification.verify_did_document_claim") as mock_did:
+                with patch("our_federation.domain_verification.verify_did_document_claim") as mock_did:
                     mock_did.return_value = (False, None, "DID error")
 
                     result = await verify_domain(

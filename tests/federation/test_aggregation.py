@@ -14,9 +14,9 @@ from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 import pytest
-from oro_confidence import DimensionalConfidence
+from our_confidence import DimensionalConfidence
 
-from oro_federation.aggregation import (
+from our_federation.aggregation import (
     MIN_FEDERATIONS_FOR_AGGREGATE,
     AggregationConfig,
     AggregationStrategy,
@@ -35,8 +35,8 @@ from oro_federation.aggregation import (
     aggregate_cross_federation,
     create_contribution,
 )
-from oro_federation.models import FederatedBelief, ShareLevel, Visibility
-from oro_federation.privacy import PrivacyConfig, TemporalSmoother
+from our_federation.models import FederatedBelief, ShareLevel, Visibility
+from our_federation.privacy import PrivacyConfig, TemporalSmoother
 
 # =============================================================================
 # FIXTURES
@@ -935,7 +935,7 @@ class TestIntegration:
 
     def test_privacy_budget_consumption(self) -> None:
         """Test that privacy budget is consumed on queries."""
-        from oro_federation.privacy import PrivacyBudget
+        from our_federation.privacy import PrivacyBudget
 
         budget = PrivacyBudget(
             federation_id=uuid4(),

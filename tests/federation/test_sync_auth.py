@@ -16,7 +16,7 @@ from unittest.mock import MagicMock, patch
 import pytest
 
 # Import directly from the module to access private function
-import oro_federation.sync as sync_module
+import our_federation.sync as sync_module
 
 # =============================================================================
 # AUTH HEADER TESTS

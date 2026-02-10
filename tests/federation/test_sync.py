@@ -19,8 +19,8 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from oro_federation.models import SyncStatus
-from oro_federation.sync import (
+from our_federation.models import SyncStatus
+from our_federation.sync import (
     SyncManager,
     compare_vector_clocks,
     get_pending_sync_items,
@@ -56,7 +56,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True) -> Generator:
         yield mock_cursor
 
-    with patch("oro_federation.sync.get_cursor", _mock_get_cursor):
+    with patch("our_federation.sync.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 
@@ -353,7 +353,7 @@ class TestSyncManager:
 
     def test_sync_manager_init(self):
         """Test SyncManager initialization."""
-        with patch("oro_federation.sync.get_federation_config") as mock_settings:
+        with patch("our_federation.sync.get_federation_config") as mock_settings:
             mock_settings.return_value = MagicMock()
             manager = SyncManager()
             assert manager._running is False
@@ -362,7 +362,7 @@ class TestSyncManager:
     @pytest.mark.asyncio
     async def test_sync_manager_start_stop(self):
         """Test SyncManager start and stop."""
-        with patch("oro_federation.sync.get_federation_config") as mock_settings:
+        with patch("our_federation.sync.get_federation_config") as mock_settings:
             mock_settings.return_value = MagicMock(federation_sync_interval_seconds=0.1)
             manager = SyncManager()
 
@@ -383,7 +383,7 @@ class TestSyncManager:
     @pytest.mark.asyncio
     async def test_sync_manager_already_running(self):
         """Test that start() does nothing if already running."""
-        with patch("oro_federation.sync.get_federation_config") as mock_settings:
+        with patch("our_federation.sync.get_federation_config") as mock_settings:
             mock_settings.return_value = MagicMock(federation_sync_interval_seconds=0.1)
             manager = SyncManager()
             manager._running = True
@@ -396,10 +396,10 @@ class TestSyncManager:
     async def test_sync_manager_process_outbound_queue(self):
         """Test processing outbound queue."""
         with (
-            patch("oro_federation.sync.get_federation_config") as mock_settings,
-            patch("oro_federation.sync.get_cursor") as mock_cursor_ctx,
-            patch("oro_federation.sync.get_pending_sync_items"),
-            patch("oro_federation.sync.get_node_trust"),
+            patch("our_federation.sync.get_federation_config") as mock_settings,
+            patch("our_federation.sync.get_cursor") as mock_cursor_ctx,
+            patch("our_federation.sync.get_pending_sync_items"),
+            patch("our_federation.sync.get_node_trust"),
         ):
             mock_settings.return_value = MagicMock(federation_sync_interval_seconds=60)
 
@@ -419,8 +419,8 @@ class TestSyncManager:
     async def test_sync_manager_belief_to_federated(self):
         """Test converting belief to federated format."""
         with (
-            patch("oro_federation.sync.get_federation_config") as mock_settings,
-            patch("oro_federation.identity.sign_belief_content") as mock_sign,
+            patch("our_federation.sync.get_federation_config") as mock_settings,
+            patch("our_federation.identity.sign_belief_content") as mock_sign,
         ):
             mock_settings.return_value = MagicMock(
                 federation_node_did="did:vkb:web:test.example.com",
@@ -561,8 +561,8 @@ class TestTriggerSync:
     async def test_trigger_sync_all_nodes(self):
         """Test triggering sync for all nodes."""
         with (
-            patch("oro_federation.sync.get_federation_config") as mock_settings,
-            patch("oro_federation.sync.SyncManager") as MockManager,  # noqa: N806
+            patch("our_federation.sync.get_federation_config") as mock_settings,
+            patch("our_federation.sync.SyncManager") as MockManager,  # noqa: N806
         ):
             mock_settings.return_value = MagicMock()
             mock_manager = MagicMock()
@@ -580,11 +580,11 @@ class TestTriggerSync:
         node_id = uuid4()
 
         with (
-            patch("oro_federation.sync.get_federation_config") as mock_settings,
-            patch("oro_federation.sync.get_node_by_id") as mock_get_node,
-            patch("oro_federation.sync.get_node_trust") as mock_get_trust,
-            patch("oro_federation.sync.get_sync_state") as mock_get_state,
-            patch("oro_federation.sync.SyncManager") as MockManager,  # noqa: N806
+            patch("our_federation.sync.get_federation_config") as mock_settings,
+            patch("our_federation.sync.get_node_by_id") as mock_get_node,
+            patch("our_federation.sync.get_node_trust") as mock_get_trust,
+            patch("our_federation.sync.get_sync_state") as mock_get_state,
+            patch("our_federation.sync.SyncManager") as MockManager,  # noqa: N806
         ):
             mock_settings.return_value = MagicMock()
             mock_node = MagicMock()
@@ -607,8 +607,8 @@ class TestTriggerSync:
     async def test_trigger_sync_node_not_found(self):
         """Test triggering sync when node not found."""
         with (
-            patch("oro_federation.sync.get_federation_config") as mock_settings,
-            patch("oro_federation.sync.get_node_by_id") as mock_get_node,
+            patch("our_federation.sync.get_federation_config") as mock_settings,
+            patch("our_federation.sync.get_node_by_id") as mock_get_node,
         ):
             mock_settings.return_value = MagicMock()
             mock_get_node.return_value = None
@@ -680,11 +680,11 @@ class TestVectorClockIntegration:
         node_id = uuid4()
 
         with (
-            patch("oro_federation.sync.get_federation_config") as mock_settings,
-            patch("oro_federation.sync.get_sync_state") as mock_get_state,
-            patch("oro_federation.sync.update_sync_state"),
-            patch("oro_federation.sync.mark_node_active"),
-            patch("oro_federation.sync.get_cursor"),
+            patch("our_federation.sync.get_federation_config") as mock_settings,
+            patch("our_federation.sync.get_sync_state") as mock_get_state,
+            patch("our_federation.sync.update_sync_state"),
+            patch("our_federation.sync.mark_node_active"),
+            patch("our_federation.sync.get_cursor"),
             patch("aiohttp.ClientSession") as mock_session_class,
         ):
             mock_settings.return_value = MagicMock(
@@ -718,7 +718,7 @@ class TestVectorClockIntegration:
             manager = SyncManager()
 
             # Capture logging
-            with patch("oro_federation.sync.logger") as mock_logger:
+            with patch("our_federation.sync.logger") as mock_logger:
                 await manager._pull_from_node(
                     node_id=node_id,
                     federation_endpoint="https://peer.example.com/federation",
@@ -738,11 +738,11 @@ class TestVectorClockIntegration:
         node_id = uuid4()
 
         with (
-            patch("oro_federation.sync.get_federation_config") as mock_settings,
-            patch("oro_federation.sync.get_sync_state") as mock_get_state,
-            patch("oro_federation.sync.update_sync_state"),
-            patch("oro_federation.sync.mark_node_active"),
-            patch("oro_federation.sync.get_cursor"),
+            patch("our_federation.sync.get_federation_config") as mock_settings,
+            patch("our_federation.sync.get_sync_state") as mock_get_state,
+            patch("our_federation.sync.update_sync_state"),
+            patch("our_federation.sync.mark_node_active"),
+            patch("our_federation.sync.get_cursor"),
             patch("aiohttp.ClientSession") as mock_session_class,
         ):
             mock_settings.return_value = MagicMock(
@@ -775,7 +775,7 @@ class TestVectorClockIntegration:
 
             manager = SyncManager()
 
-            with patch("oro_federation.sync.logger") as mock_logger:
+            with patch("our_federation.sync.logger") as mock_logger:
                 await manager._pull_from_node(
                     node_id=node_id,
                     federation_endpoint="https://peer.example.com/federation",
@@ -794,8 +794,8 @@ class TestVectorClockIntegration:
         node_id = uuid4()
 
         with (
-            patch("oro_federation.sync.get_federation_config") as mock_settings,
-            patch("oro_federation.sync.handle_share_belief") as mock_handler,
+            patch("our_federation.sync.get_federation_config") as mock_settings,
+            patch("our_federation.sync.handle_share_belief") as mock_handler,
         ):
             mock_settings.return_value = MagicMock(
                 federation_node_did="did:vkb:web:local",
@@ -808,7 +808,7 @@ class TestVectorClockIntegration:
                 {"type": "belief_created", "belief": {"content": "test", "confidence": {"overall": 0.8}}},
             ]
 
-            with patch("oro_federation.sync.logger") as mock_logger:
+            with patch("our_federation.sync.logger") as mock_logger:
                 result = await manager._process_sync_changes(
                     node_id=node_id,
                     trust_level=0.5,

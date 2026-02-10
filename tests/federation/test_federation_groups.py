@@ -10,7 +10,7 @@ import pytest
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
-from oro_federation.groups import (
+from our_federation.groups import (
     # Classes
     FederationGroup,
     # Enums
@@ -354,7 +354,7 @@ class TestMLSIntegration:
         member_signing_key,
     ):
         """Test that MLS add_member updates the federation group properly."""
-        from oro_federation.groups import KeyPackage
+        from our_federation.groups import KeyPackage
 
         # Generate member's key package (signing_key is already bytes)
         member_keypackage, _ = KeyPackage.generate(

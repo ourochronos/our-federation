@@ -25,9 +25,9 @@ from enum import StrEnum
 from typing import Any
 from uuid import UUID, uuid4
 
-from oro_db import get_cursor
+from our_db import get_cursor
 
-from oro_federation.exceptions import ValenceException
+from our_federation.exceptions import ValenceException
 
 from .models import (
     FederatedBelief,

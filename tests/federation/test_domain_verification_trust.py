@@ -19,9 +19,9 @@ from __future__ import annotations
 from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
-from oro_privacy import TrustService
+from our_privacy import TrustService
 
-from oro_federation.domain_verification import (
+from our_federation.domain_verification import (
     DEFAULT_TRUST_SCORE,
     DOMAIN_VERIFICATION_TRUST_DOMAIN,
     LOW_TRUST_THRESHOLD,
@@ -84,7 +84,7 @@ class TestGetFederationTrust:
         set_trust_service(None)
         # Patch the import inside _get_trust_service to simulate unavailable service
         with patch(
-            "oro_privacy.get_trust_service",
+            "our_privacy.get_trust_service",
             side_effect=ImportError("no module"),
         ):
             score = await get_federation_trust("did:local", "did:remote")
@@ -196,22 +196,22 @@ class TestTrustWeightedVerification:
         # Mock only DNS to succeed, other methods fail
         with (
             patch(
-                "oro_federation.domain_verification.verify_dns_txt_record",
+                "our_federation.domain_verification.verify_dns_txt_record",
                 new_callable=AsyncMock,
                 return_value=(True, "valence-did=did:vkb:web:high-trust", None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_mutual_attestation",
+                "our_federation.domain_verification._verify_mutual_attestation",
                 new_callable=AsyncMock,
                 return_value=(False, None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_external_authority",
+                "our_federation.domain_verification._verify_external_authority",
                 new_callable=AsyncMock,
                 return_value=(False, None, "unavailable"),
             ),
             patch(
-                "oro_federation.domain_verification.verify_did_document_claim",
+                "our_federation.domain_verification.verify_did_document_claim",
                 new_callable=AsyncMock,
                 return_value=(False, None, "no endpoint"),
             ),
@@ -246,22 +246,22 @@ class TestTrustWeightedVerification:
         # Mock only DNS succeeds, attestation fails
         with (
             patch(
-                "oro_federation.domain_verification.verify_dns_txt_record",
+                "our_federation.domain_verification.verify_dns_txt_record",
                 new_callable=AsyncMock,
                 return_value=(True, "valence-did=did:vkb:web:low-trust", None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_mutual_attestation",
+                "our_federation.domain_verification._verify_mutual_attestation",
                 new_callable=AsyncMock,
                 return_value=(False, None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_external_authority",
+                "our_federation.domain_verification._verify_external_authority",
                 new_callable=AsyncMock,
                 return_value=(False, None, "unavailable"),
             ),
             patch(
-                "oro_federation.domain_verification.verify_did_document_claim",
+                "our_federation.domain_verification.verify_did_document_claim",
                 new_callable=AsyncMock,
                 return_value=(False, None, "no endpoint"),
             ),
@@ -296,22 +296,22 @@ class TestTrustWeightedVerification:
         # Mock only DNS succeeds
         with (
             patch(
-                "oro_federation.domain_verification.verify_dns_txt_record",
+                "our_federation.domain_verification.verify_dns_txt_record",
                 new_callable=AsyncMock,
                 return_value=(True, "valence-did=did:vkb:web:medium-trust", None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_mutual_attestation",
+                "our_federation.domain_verification._verify_mutual_attestation",
                 new_callable=AsyncMock,
                 return_value=(False, None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_external_authority",
+                "our_federation.domain_verification._verify_external_authority",
                 new_callable=AsyncMock,
                 return_value=(False, None, "unavailable"),
             ),
             patch(
-                "oro_federation.domain_verification.verify_did_document_claim",
+                "our_federation.domain_verification.verify_did_document_claim",
                 new_callable=AsyncMock,
                 return_value=(False, None, "no endpoint"),
             ),
@@ -343,22 +343,22 @@ class TestTrustWeightedVerification:
 
         with (
             patch(
-                "oro_federation.domain_verification.verify_dns_txt_record",
+                "our_federation.domain_verification.verify_dns_txt_record",
                 new_callable=AsyncMock,
                 return_value=(True, "txt-record", None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_mutual_attestation",
+                "our_federation.domain_verification._verify_mutual_attestation",
                 new_callable=AsyncMock,
                 return_value=(False, None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_external_authority",
+                "our_federation.domain_verification._verify_external_authority",
                 new_callable=AsyncMock,
                 return_value=(False, None, "err"),
             ),
             patch(
-                "oro_federation.domain_verification.verify_did_document_claim",
+                "our_federation.domain_verification.verify_did_document_claim",
                 new_callable=AsyncMock,
                 return_value=(False, None, "err"),
             ),
@@ -389,22 +389,22 @@ class TestTrustWeightedVerification:
 
         with (
             patch(
-                "oro_federation.domain_verification.verify_dns_txt_record",
+                "our_federation.domain_verification.verify_dns_txt_record",
                 new_callable=AsyncMock,
                 return_value=(True, "txt", None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_mutual_attestation",
+                "our_federation.domain_verification._verify_mutual_attestation",
                 new_callable=AsyncMock,
                 return_value=(False, None),
             ),
             patch(
-                "oro_federation.domain_verification._verify_external_authority",
+                "our_federation.domain_verification._verify_external_authority",
                 new_callable=AsyncMock,
                 return_value=(False, None, "err"),
             ),
             patch(
-                "oro_federation.domain_verification.verify_did_document_claim",
+                "our_federation.domain_verification.verify_did_document_claim",
                 new_callable=AsyncMock,
                 return_value=(False, None, "err"),
             ),
@@ -476,7 +476,7 @@ class TestAttestationChainTrust:
             return DEFAULT_TRUST_SCORE
 
         with patch(
-            "oro_federation.domain_verification.get_federation_trust",
+            "our_federation.domain_verification.get_federation_trust",
             side_effect=mock_trust,
         ):
             verified, _ = await _verify_mutual_attestation(

@@ -1,4 +1,4 @@
-"""oro-federation — P2P federation protocol, peer sync, consent, trust propagation.
+"""our-federation — P2P federation protocol, peer sync, consent, trust propagation.
 
 Implements the Valence Federation Protocol (VFP), enabling sovereign
 knowledge bases to form trust networks, share intelligence, and

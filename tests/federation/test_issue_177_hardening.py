@@ -18,7 +18,7 @@ class TestSensitiveDomainClassification:
 
     def test_exact_match_works(self):
         """Sensitive domains detected with exact token match."""
-        from oro_federation.privacy import is_sensitive_domain
+        from our_federation.privacy import is_sensitive_domain
 
         # Exact matches should work
         assert is_sensitive_domain(["health"]) is True
@@ -28,7 +28,7 @@ class TestSensitiveDomainClassification:
 
     def test_path_tokens_detected(self):
         """Domains in paths are detected."""
-        from oro_federation.privacy import is_sensitive_domain
+        from our_federation.privacy import is_sensitive_domain
 
         # Path separators should be split
         assert is_sensitive_domain(["personal/health"]) is True
@@ -38,7 +38,7 @@ class TestSensitiveDomainClassification:
 
     def test_no_false_positives_from_substring(self):
         """Substring matching no longer causes false positives."""
-        from oro_federation.privacy import is_sensitive_domain
+        from our_federation.privacy import is_sensitive_domain
 
         # These should NOT match because we use token matching, not substring
         assert is_sensitive_domain(["weather"]) is False  # contains "the"
@@ -47,7 +47,7 @@ class TestSensitiveDomainClassification:
 
     def test_non_sensitive_domains(self):
         """Non-sensitive domains return False."""
-        from oro_federation.privacy import is_sensitive_domain
+        from our_federation.privacy import is_sensitive_domain
 
         assert is_sensitive_domain(["science"]) is False
         assert is_sensitive_domain(["sports"]) is False
@@ -56,7 +56,7 @@ class TestSensitiveDomainClassification:
 
     def test_get_sensitive_category(self):
         """Category detection works."""
-        from oro_federation.privacy import get_sensitive_category
+        from our_federation.privacy import get_sensitive_category
 
         assert get_sensitive_category("health") == "health"
         assert get_sensitive_category("finance") == "finance"
@@ -69,7 +69,7 @@ class TestFailedQueryBudgetConsumption:
 
     def test_failed_query_consumes_budget(self):
         """Queries failing k-anonymity still consume epsilon."""
-        from oro_federation.privacy import (
+        from our_federation.privacy import (
             FAILED_QUERY_EPSILON_COST,
             PrivacyBudget,
             PrivacyConfig,
@@ -100,7 +100,7 @@ class TestFailedQueryBudgetConsumption:
 
     def test_successful_query_consumes_full_budget(self):
         """Successful queries consume full epsilon."""
-        from oro_federation.privacy import (
+        from our_federation.privacy import (
             PrivacyBudget,
             PrivacyConfig,
             execute_private_query,
@@ -133,7 +133,7 @@ class TestConsentStoreLRU:
     @pytest.mark.asyncio
     async def test_chains_evicted_at_capacity(self):
         """Old chains are evicted when max capacity reached."""
-        from oro_federation.consent import (
+        from our_federation.consent import (
             CrossFederationConsentChain,
             InMemoryConsentChainStore,
         )
@@ -161,7 +161,7 @@ class TestConsentStoreLRU:
     @pytest.mark.asyncio
     async def test_accessed_chains_not_evicted(self):
         """Accessing a chain moves it to end of LRU queue."""
-        from oro_federation.consent import (
+        from our_federation.consent import (
             CrossFederationConsentChain,
             InMemoryConsentChainStore,
         )

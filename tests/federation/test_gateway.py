@@ -21,7 +21,7 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from oro_federation.gateway import (
+from our_federation.gateway import (
     DEFAULT_RATE_LIMIT_MAX_BELIEFS,
     DEFAULT_RATE_LIMIT_MAX_REQUESTS,
     # Constants
@@ -50,8 +50,8 @@ from oro_federation.gateway import (
     # Functions
     get_gateway_registry,
 )
-from oro_federation.models import FederatedBelief, Visibility
-from oro_federation.protocol import ErrorCode
+from our_federation.models import FederatedBelief, Visibility
+from our_federation.protocol import ErrorCode
 
 # =============================================================================
 # FIXTURES
@@ -101,7 +101,7 @@ def gateway(federation_id: UUID, gateway_endpoint: str, gateway_config: GatewayC
 @pytest.fixture
 def mock_belief() -> FederatedBelief:
     """Mock federated belief."""
-    from oro_confidence import DimensionalConfidence
+    from our_confidence import DimensionalConfidence
 
     return FederatedBelief(
         id=uuid4(),
@@ -153,7 +153,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True):
         yield mock_cursor
 
-    with patch("oro_federation.gateway.get_cursor", _mock_get_cursor):
+    with patch("our_federation.gateway.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 
@@ -726,7 +726,7 @@ class TestGatewayNodeValidation:
         external_federation_id: UUID,
     ):
         """Test validation fails for oversized belief."""
-        from oro_confidence import DimensionalConfidence
+        from our_confidence import DimensionalConfidence
 
         large_belief = FederatedBelief(
             id=uuid4(),
@@ -875,7 +875,7 @@ class TestGatewayNodeInboundOperations:
         await gateway.start()
 
         # Create oversized belief
-        from oro_confidence import DimensionalConfidence
+        from our_confidence import DimensionalConfidence
 
         large_belief = FederatedBelief(
             id=uuid4(),

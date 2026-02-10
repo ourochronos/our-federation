@@ -16,7 +16,7 @@ from typing import Any
 from uuid import UUID
 
 from mcp.types import Tool
-from oro_db import get_cursor
+from our_db import get_cursor
 
 from .discovery import (
     bootstrap_federation_sync,
@@ -1007,7 +1007,7 @@ def federation_corroboration_check(
 
         # If belief_id provided, use the new corroboration module directly
         if belief_id:
-            from oro_federation.corroboration import get_corroboration
+            from our_federation.corroboration import get_corroboration
 
             corroboration_info = get_corroboration(UUID(belief_id))
             if not corroboration_info:
@@ -1099,7 +1099,7 @@ def federation_endorsement_give(
 ) -> dict[str, Any]:
     """Endorse another federation node."""
     try:
-        from oro_federation.config import get_config as get_settings
+        from our_federation.config import get_config as get_settings
 
         from .models import TrustAttestation
 

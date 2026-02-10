@@ -19,9 +19,9 @@ from typing import Any
 from uuid import UUID
 
 import aiohttp
-from oro_db import get_cursor
+from our_db import get_cursor
 
-from oro_federation.config import get_config
+from our_federation.config import get_config
 
 from .identity import (
     WELL_KNOWN_NODE_METADATA,

@@ -18,8 +18,8 @@ from enum import StrEnum
 from typing import Any
 from uuid import UUID, uuid4
 
-from oro_confidence import ConfidenceDimension, DimensionalConfidence
-from oro_db import get_cursor
+from our_confidence import ConfidenceDimension, DimensionalConfidence
+from our_db import get_cursor
 
 from .challenge_store import get_auth_challenge_store
 from .identity import (
@@ -637,7 +637,7 @@ def _process_incoming_belief(
         return "Belief visibility is private"
 
     # Validate federation embedding if provided
-    from oro_federation.federation_embedding import validate_incoming_belief_embedding
+    from our_federation.federation_embedding import validate_incoming_belief_embedding
 
     is_valid, embed_error = validate_incoming_belief_embedding(belief_data)
     if not is_valid:
@@ -646,7 +646,7 @@ def _process_incoming_belief(
     # Check for corroboration with existing beliefs
     # If a highly similar belief exists, add corroboration instead of creating new
     try:
-        from oro_federation.corroboration import process_incoming_belief_corroboration
+        from our_federation.corroboration import process_incoming_belief_corroboration
 
         corroboration_result = process_incoming_belief_corroboration(
             content=content,
@@ -891,7 +891,7 @@ def _belief_row_to_federated(
     Returns:
         Federated belief dict, or None if not shareable
     """
-    from oro_federation.config import get_federation_config
+    from our_federation.config import get_federation_config
 
     settings = get_federation_config()
 
@@ -1303,7 +1303,7 @@ async def handle_message(
         if not sender_node_id:
             # When federation_require_auth is enabled, always reject
             # unauthenticated non-auth messages
-            from oro_federation.config import get_config
+            from our_federation.config import get_config
 
             config = get_config()
             if config.federation_require_auth:

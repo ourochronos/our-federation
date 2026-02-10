@@ -23,7 +23,7 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from oro_federation.privacy import (
+from our_federation.privacy import (
     # Constants
     DEFAULT_DAILY_DELTA_BUDGET,
     DEFAULT_DAILY_EPSILON_BUDGET,

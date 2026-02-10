@@ -14,7 +14,7 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from oro_federation.trust_propagation import (
+from our_federation.trust_propagation import (
     TransitiveTrustResult,
     TrustCache,
     TrustPropagation,
@@ -563,7 +563,7 @@ class TestModuleFunctions:
     def test_get_trust_propagation(self):
         """Test getting default propagation instance."""
         # Reset global state
-        import oro_federation.trust_propagation as tp
+        import our_federation.trust_propagation as tp
 
         tp._default_propagation = None
 

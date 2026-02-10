@@ -1,4 +1,4 @@
-# oro-federation
+# our-federation
 
 P2P federation protocol, peer sync, consent, trust propagation
 
@@ -9,13 +9,13 @@ _Brief description of what this brick does and why it exists._
 ## Install
 
 ```bash
-pip install oro-federation
+pip install our-federation
 ```
 
 ## Usage
 
 ```python
-from oro_federation import ...
+from our_federation import ...
 ```
 
 ## API

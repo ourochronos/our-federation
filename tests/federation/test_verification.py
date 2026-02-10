@@ -11,11 +11,11 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from oro_federation.identity import (
+from our_federation.identity import (
     DIDDocument,
     ServiceEndpoint,
 )
-from oro_federation.verification import (
+from our_federation.verification import (
     # Constants
     DNS_TXT_PREFIX,
     DOMAIN_CLAIM_SERVICE_TYPE,
@@ -484,7 +484,7 @@ class TestDIDDocumentVerification:
         mock_did_document: DIDDocument,
     ):
         """Test verification via DID document service endpoint."""
-        with patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
+        with patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
             mock_resolve.return_value = mock_did_document
 
             verified, endpoint, error = await verify_did_document_claim(remote_fed_did, test_domain)
@@ -505,7 +505,7 @@ class TestDIDDocumentVerification:
             },
         )
 
-        with patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
+        with patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
             mock_resolve.return_value = did_doc
 
             verified, endpoint, error = await verify_did_document_claim(remote_fed_did, test_domain)
@@ -522,7 +522,7 @@ class TestDIDDocumentVerification:
             profile={"name": "Remote Federation"},
         )
 
-        with patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
+        with patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
             mock_resolve.return_value = did_doc
 
             verified, endpoint, error = await verify_did_document_claim(remote_fed_did, test_domain)
@@ -534,7 +534,7 @@ class TestDIDDocumentVerification:
     @pytest.mark.asyncio
     async def test_did_verification_resolution_failure(self, remote_fed_did: str, test_domain: str):
         """Test verification when DID resolution fails."""
-        with patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
+        with patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
             mock_resolve.return_value = None
 
             verified, endpoint, error = await verify_did_document_claim(remote_fed_did, test_domain)
@@ -571,7 +571,7 @@ class TestCrossFederationVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -599,7 +599,7 @@ class TestCrossFederationVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -628,7 +628,7 @@ class TestCrossFederationVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -654,7 +654,7 @@ class TestCrossFederationVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -681,7 +681,7 @@ class TestCrossFederationVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -714,7 +714,7 @@ class TestCrossFederationVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -748,7 +748,7 @@ class TestCrossFederationVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -781,7 +781,7 @@ class TestCrossFederationVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -813,7 +813,7 @@ class TestCrossFederationVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -863,7 +863,7 @@ class TestBatchVerification:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -915,7 +915,7 @@ class TestSyncFunctions:
         mock_did_document: DIDDocument,
     ):
         """Test synchronous DID verification."""
-        with patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
+        with patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve:
             mock_resolve.return_value = mock_did_document
 
             verified, endpoint, error = verify_did_document_claim_sync(remote_fed_did, test_domain)
@@ -935,7 +935,7 @@ class TestSyncFunctions:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -1019,7 +1019,7 @@ class TestErrorHandling:
         """Test handling of DNS resolution exceptions."""
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -1045,7 +1045,7 @@ class TestErrorHandling:
 
         with (
             patch("dns.resolver.Resolver") as mock_resolver_class,
-            patch("oro_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
+            patch("our_federation.verification.resolve_did", new_callable=AsyncMock) as mock_resolve,
         ):
             mock_resolver = MagicMock()
             mock_resolver_class.return_value = mock_resolver
@@ -1065,7 +1065,7 @@ class TestErrorHandling:
         test_domain: str,
     ):
         """Test that sync wrapper handles exceptions gracefully."""
-        with patch("oro_federation.verification.asyncio.run") as mock_run:
+        with patch("our_federation.verification.asyncio.run") as mock_run:
             mock_run.side_effect = RuntimeError("Event loop error")
 
             result = verify_cross_federation_domain_sync(local_fed_did, remote_fed_did, test_domain)

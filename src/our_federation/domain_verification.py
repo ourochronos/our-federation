@@ -720,7 +720,7 @@ def _get_trust_service() -> Any:
     if _trust_service_override is not None:
         return _trust_service_override
     try:
-        from oro_privacy import get_trust_service
+        from our_privacy import get_trust_service
 
         return get_trust_service()
     except Exception:

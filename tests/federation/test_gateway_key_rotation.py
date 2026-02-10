@@ -17,7 +17,7 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.gateway import (
+from our_federation.gateway import (
     DEFAULT_KEY_SIZE,
     DEFAULT_ROTATION_INTERVAL_HOURS,
     DEFAULT_TRANSITION_PERIOD_HOURS,

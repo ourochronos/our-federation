@@ -19,11 +19,11 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.challenge_store import (
+from our_federation.challenge_store import (
     get_auth_challenge_store,
     reset_auth_challenge_store,
 )
-from oro_federation.protocol import (
+from our_federation.protocol import (
     AuthChallengeRequest,
     AuthChallengeResponse,
     AuthVerifyRequest,
@@ -72,7 +72,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True) -> Generator:
         yield mock_cursor
 
-    with patch("oro_federation.protocol.get_cursor", _mock_get_cursor):
+    with patch("our_federation.protocol.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 
@@ -569,7 +569,7 @@ class TestHandleRequestBeliefs:
             requester_did="did:vkb:web:test.example.com",
         )
 
-        with patch("oro_federation.config.get_federation_config") as mock_fed_config:
+        with patch("our_federation.config.get_federation_config") as mock_fed_config:
             mock_fed_config.return_value = MagicMock(
                 federation_node_did="did:vkb:web:local",
                 federation_private_key=None,
@@ -614,7 +614,7 @@ class TestHandleSyncRequest:
             domains=["test"],
         )
 
-        with patch("oro_federation.config.get_federation_config") as mock_fed_config:
+        with patch("our_federation.config.get_federation_config") as mock_fed_config:
             mock_fed_config.return_value = MagicMock(
                 federation_node_did="did:vkb:web:local",
                 federation_private_key=None,
@@ -642,7 +642,7 @@ class TestHandleSyncRequest:
         )
 
         node_id = uuid4()
-        with patch("oro_federation.config.get_federation_config") as mock_fed_config:
+        with patch("our_federation.config.get_federation_config") as mock_fed_config:
             mock_fed_config.return_value = MagicMock(
                 federation_node_did="did:vkb:web:local",
                 federation_private_key=None,
@@ -665,7 +665,7 @@ class TestHandleSyncRequest:
 
         request = SyncRequest()
 
-        with patch("oro_federation.config.get_federation_config") as mock_fed_config:
+        with patch("our_federation.config.get_federation_config") as mock_fed_config:
             mock_fed_config.return_value = MagicMock(
                 federation_node_did="did:vkb:web:local",
                 federation_private_key=None,
@@ -837,7 +837,7 @@ class TestHandleMessage:
 
         msg = ShareBeliefRequest(beliefs=[])
 
-        with patch("oro_federation.trust.get_effective_trust") as mock_trust:
+        with patch("our_federation.trust.get_effective_trust") as mock_trust:
             mock_trust.return_value = 0.5
 
             result = await handle_message(
@@ -862,8 +862,8 @@ class TestHandleMessage:
         )
 
         with (
-            patch("oro_federation.trust.get_effective_trust") as mock_trust,
-            patch("oro_federation.config.get_federation_config") as mock_fed_config,
+            patch("our_federation.trust.get_effective_trust") as mock_trust,
+            patch("our_federation.config.get_federation_config") as mock_fed_config,
         ):
             mock_trust.return_value = 0.5
             mock_fed_config.return_value = MagicMock(
@@ -888,8 +888,8 @@ class TestHandleMessage:
         msg = SyncRequest()
 
         with (
-            patch("oro_federation.trust.get_effective_trust") as mock_trust,
-            patch("oro_federation.config.get_federation_config") as mock_fed_config,
+            patch("our_federation.trust.get_effective_trust") as mock_trust,
+            patch("our_federation.config.get_federation_config") as mock_fed_config,
         ):
             mock_trust.return_value = 0.5
             mock_fed_config.return_value = MagicMock(

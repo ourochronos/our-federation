@@ -13,7 +13,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from oro_federation.challenge_store import (
+from our_federation.challenge_store import (
     _REDIS_KEY_PREFIX,
     AuthChallengeStore,
     MemoryAuthChallengeStore,
@@ -256,7 +256,7 @@ class TestRedisAuthChallengeStore:
 
     def test_import_error_without_redis(self):
         """Test that a helpful error is raised if redis is not installed."""
-        with patch("oro_federation.challenge_store.redis", None):
+        with patch("our_federation.challenge_store.redis", None):
             with pytest.raises(ImportError, match="redis package is required"):
                 RedisAuthChallengeStore()
 
@@ -313,7 +313,7 @@ class TestGetAuthChallengeStore:
 
         with patch.dict(os.environ, {"VALENCE_CHALLENGE_STORE": "redis"}):
             reset_auth_challenge_store()
-            with patch("oro_federation.challenge_store.redis") as mock_redis_mod:
+            with patch("our_federation.challenge_store.redis") as mock_redis_mod:
                 mock_redis_mod.Redis.from_url.return_value = mock_client
                 mock_redis_mod.ConnectionError = ConnectionError
 

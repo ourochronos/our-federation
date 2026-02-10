@@ -18,11 +18,11 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from oro_federation.models import (
+from our_federation.models import (
     AnnotationType,
     TrustPreference,
 )
-from oro_federation.trust_registry import TrustRegistry
+from our_federation.trust_registry import TrustRegistry
 
 # =============================================================================
 # FIXTURES
@@ -46,7 +46,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True) -> Generator:
         yield mock_cursor
 
-    with patch("oro_federation.trust_registry.get_cursor", _mock_get_cursor):
+    with patch("our_federation.trust_registry.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 
@@ -231,7 +231,7 @@ class TestSaveNodeTrust:
         mock_get_cursor.fetchone.return_value = row
 
         # Create a NodeTrust from the row
-        from oro_federation.models import NodeTrust
+        from our_federation.models import NodeTrust
 
         node_trust = NodeTrust.from_row(row)
 
@@ -244,7 +244,7 @@ class TestSaveNodeTrust:
         """Test save when node trust doesn't exist (returns None)."""
         mock_get_cursor.fetchone.return_value = None
 
-        from oro_federation.models import NodeTrust
+        from our_federation.models import NodeTrust
 
         node_trust = NodeTrust.from_row(sample_node_trust_row())
 
@@ -256,7 +256,7 @@ class TestSaveNodeTrust:
         """Test database error handling on save."""
         mock_get_cursor.execute.side_effect = Exception("Database error")
 
-        from oro_federation.models import NodeTrust
+        from our_federation.models import NodeTrust
 
         node_trust = NodeTrust.from_row(sample_node_trust_row())
 

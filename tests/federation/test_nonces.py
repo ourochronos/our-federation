@@ -17,7 +17,7 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.nonces import (
+from our_federation.nonces import (
     DEFAULT_NONCE_TTL_SECONDS,
     NonceTracker,
     generate_nonce,
@@ -230,9 +230,9 @@ class TestFederatedBeliefNonce:
     """Tests for the nonce field on FederatedBelief."""
 
     def test_nonce_field_default_none(self):
-        from oro_confidence import DimensionalConfidence
+        from our_confidence import DimensionalConfidence
 
-        from oro_federation.models import FederatedBelief
+        from our_federation.models import FederatedBelief
 
         belief = FederatedBelief(
             id=uuid4(),
@@ -244,9 +244,9 @@ class TestFederatedBeliefNonce:
         assert belief.nonce is None
 
     def test_nonce_field_set(self):
-        from oro_confidence import DimensionalConfidence
+        from our_confidence import DimensionalConfidence
 
-        from oro_federation.models import FederatedBelief
+        from our_federation.models import FederatedBelief
 
         nonce = generate_nonce()
         belief = FederatedBelief(
@@ -260,9 +260,9 @@ class TestFederatedBeliefNonce:
         assert belief.nonce == nonce
 
     def test_nonce_in_to_dict(self):
-        from oro_confidence import DimensionalConfidence
+        from our_confidence import DimensionalConfidence
 
-        from oro_federation.models import FederatedBelief
+        from our_federation.models import FederatedBelief
 
         nonce = generate_nonce()
         belief = FederatedBelief(
@@ -277,9 +277,9 @@ class TestFederatedBeliefNonce:
         assert d["nonce"] == nonce
 
     def test_nonce_none_in_to_dict(self):
-        from oro_confidence import DimensionalConfidence
+        from our_confidence import DimensionalConfidence
 
-        from oro_federation.models import FederatedBelief
+        from our_federation.models import FederatedBelief
 
         belief = FederatedBelief(
             id=uuid4(),
@@ -292,9 +292,9 @@ class TestFederatedBeliefNonce:
         assert d["nonce"] is None
 
     def test_nonce_in_signable_content_when_set(self):
-        from oro_confidence import DimensionalConfidence
+        from our_confidence import DimensionalConfidence
 
-        from oro_federation.models import FederatedBelief
+        from our_federation.models import FederatedBelief
 
         nonce = generate_nonce()
         belief = FederatedBelief(
@@ -309,9 +309,9 @@ class TestFederatedBeliefNonce:
         assert signable["nonce"] == nonce
 
     def test_nonce_absent_from_signable_when_none(self):
-        from oro_confidence import DimensionalConfidence
+        from our_confidence import DimensionalConfidence
 
-        from oro_federation.models import FederatedBelief
+        from our_federation.models import FederatedBelief
 
         belief = FederatedBelief(
             id=uuid4(),
@@ -348,7 +348,7 @@ class TestProtocolNonceValidation:
 
     def test_replayed_nonce_rejected(self):
         """A belief with a previously-seen nonce should be rejected."""
-        from oro_federation.protocol import _process_incoming_belief
+        from our_federation.protocol import _process_incoming_belief
 
         nonce = generate_nonce()
         sender_id = uuid4()
@@ -365,13 +365,13 @@ class TestProtocolNonceValidation:
 
     def test_no_nonce_skips_check(self):
         """Beliefs without a nonce should skip nonce validation."""
-        from oro_federation.protocol import _process_incoming_belief
+        from our_federation.protocol import _process_incoming_belief
 
         # This will fail at signature verification, but should NOT fail
         # at nonce check — we just need to verify no nonce error appears
         belief_data = self._make_belief_data(nonce=None)
 
-        with patch("oro_federation.protocol.get_cursor") as mock_cursor:
+        with patch("our_federation.protocol.get_cursor") as mock_cursor:
             cursor_ctx = MagicMock()
             cursor = MagicMock()
             cursor.fetchone.return_value = {"public_key_multibase": "z6MkFake"}
@@ -380,7 +380,7 @@ class TestProtocolNonceValidation:
             mock_cursor.return_value = cursor_ctx
 
             with patch(
-                "oro_federation.protocol.verify_belief_signature",
+                "our_federation.protocol.verify_belief_signature",
                 return_value=False,
             ):
                 result = _process_incoming_belief(belief_data, uuid4(), 0.5)
@@ -389,7 +389,7 @@ class TestProtocolNonceValidation:
 
     def test_different_nonces_both_accepted(self):
         """Different nonces from the same origin should not trigger replay."""
-        from oro_federation.protocol import _process_incoming_belief
+        from our_federation.protocol import _process_incoming_belief
 
         sender_id = uuid4()
 
@@ -401,9 +401,9 @@ class TestProtocolNonceValidation:
         cursor_ctx.__exit__ = MagicMock(return_value=False)
 
         with (
-            patch("oro_federation.protocol.get_cursor", return_value=cursor_ctx),
+            patch("our_federation.protocol.get_cursor", return_value=cursor_ctx),
             patch(
-                "oro_federation.protocol.verify_belief_signature",
+                "our_federation.protocol.verify_belief_signature",
                 return_value=False,
             ),
         ):
@@ -426,10 +426,10 @@ class TestProtocolNonceValidation:
 class TestProtocolNonceGeneration:
     """Tests for nonce generation in outbound belief conversion."""
 
-    @patch("oro_federation.config.get_federation_config")
+    @patch("our_federation.config.get_federation_config")
     def test_outbound_belief_has_nonce(self, mock_config):
         """Beliefs converted for federation should include a nonce."""
-        from oro_federation.protocol import _belief_row_to_federated
+        from our_federation.protocol import _belief_row_to_federated
 
         mock_settings = MagicMock()
         mock_settings.federation_node_did = "did:vkb:web:localhost"
@@ -454,10 +454,10 @@ class TestProtocolNonceGeneration:
         assert isinstance(result["nonce"], str)
         assert len(result["nonce"]) == 32
 
-    @patch("oro_federation.config.get_federation_config")
+    @patch("our_federation.config.get_federation_config")
     def test_outbound_nonces_unique(self, mock_config):
         """Each outbound belief should get a unique nonce."""
-        from oro_federation.protocol import _belief_row_to_federated
+        from our_federation.protocol import _belief_row_to_federated
 
         mock_settings = MagicMock()
         mock_settings.federation_node_did = "did:vkb:web:localhost"

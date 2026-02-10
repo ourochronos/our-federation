@@ -25,7 +25,7 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.discovery import (
+from our_federation.discovery import (
     PeerExchangeMessage,
     PeerExchangeProtocol,
     PeerExchangeResponse,
@@ -34,7 +34,7 @@ from oro_federation.discovery import (
     get_peer_exchange_protocol,
     set_peer_exchange_protocol,
 )
-from oro_federation.models import (
+from our_federation.models import (
     FederationNode,
     NodeStatus,
     TrustPhase,
@@ -62,7 +62,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True) -> Generator:
         yield mock_cursor
 
-    with patch("oro_federation.discovery.get_cursor", _mock_get_cursor):
+    with patch("our_federation.discovery.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 
@@ -552,7 +552,7 @@ class TestPeerExchangeProtocolMergePeers:
         """Should reject peers we already know."""
         existing_node = MagicMock(spec=FederationNode)
 
-        with patch("oro_federation.discovery.get_node_by_did", return_value=existing_node):
+        with patch("our_federation.discovery.get_node_by_did", return_value=existing_node):
             peers = [
                 PeerInfo(
                     node_id="did:vkb:web:known.example.com",
@@ -566,7 +566,7 @@ class TestPeerExchangeProtocolMergePeers:
 
     def test_reject_invalid_address(self, protocol, mock_get_cursor):
         """Should reject peers with invalid addresses."""
-        with patch("oro_federation.discovery.get_node_by_did", return_value=None):
+        with patch("our_federation.discovery.get_node_by_did", return_value=None):
             peers = [
                 PeerInfo(
                     node_id="did:vkb:web:badaddr.example.com",
@@ -582,7 +582,7 @@ class TestPeerExchangeProtocolMergePeers:
         """Should handle database errors gracefully during merge."""
         mock_get_cursor.fetchone.side_effect = Exception("DB connection lost")
 
-        with patch("oro_federation.discovery.get_node_by_did", return_value=None):
+        with patch("our_federation.discovery.get_node_by_did", return_value=None):
             peers = [
                 PeerInfo(
                     node_id="did:vkb:web:peer.example.com",
@@ -598,7 +598,7 @@ class TestPeerExchangeProtocolMergePeers:
         """Should handle ON CONFLICT (race condition) gracefully."""
         mock_get_cursor.fetchone.return_value = None  # INSERT returned no row (conflict)
 
-        with patch("oro_federation.discovery.get_node_by_did", return_value=None):
+        with patch("our_federation.discovery.get_node_by_did", return_value=None):
             peers = [
                 PeerInfo(
                     node_id="did:vkb:web:race.example.com",
@@ -631,7 +631,7 @@ class TestPeerExchangeProtocolMergePeers:
 
         mock_get_cursor.fetchone.side_effect = fake_fetchone
 
-        with patch("oro_federation.discovery.get_node_by_did", side_effect=fake_get_node):
+        with patch("our_federation.discovery.get_node_by_did", side_effect=fake_get_node):
             peers = [
                 PeerInfo(
                     node_id="did:vkb:web:new.example.com",
@@ -720,7 +720,7 @@ class TestPeerExchangeProtocolHandleExchange:
             ],
         )
 
-        with patch("oro_federation.discovery.get_node_by_did", return_value=None):
+        with patch("our_federation.discovery.get_node_by_did", return_value=None):
             response = protocol.handle_peer_exchange(request)
 
         assert response.accepted == 1
@@ -783,7 +783,7 @@ class TestPeerExchangeProtocolRequestPeers:
 
         with (
             patch("aiohttp.ClientSession", return_value=mock_session),
-            patch("oro_federation.discovery.get_node_by_did") as mock_get_node,
+            patch("our_federation.discovery.get_node_by_did") as mock_get_node,
         ):
             # merge_peers check: first call returns None (new), second returns the node
             mock_get_node.side_effect = [None, discovered_node]
@@ -905,7 +905,7 @@ class TestSingletonManagement:
 
     def test_get_creates_default(self):
         """Should create a default instance if none set."""
-        with patch("oro_federation.discovery.get_config") as mock_config:
+        with patch("our_federation.discovery.get_config") as mock_config:
             mock_config.return_value = MagicMock(node_did="did:vkb:web:test.example.com")
             protocol = get_peer_exchange_protocol()
             assert isinstance(protocol, PeerExchangeProtocol)
@@ -923,7 +923,7 @@ class TestSingletonManagement:
         set_peer_exchange_protocol(custom)
         set_peer_exchange_protocol(None)
 
-        with patch("oro_federation.discovery.get_config") as mock_config:
+        with patch("our_federation.discovery.get_config") as mock_config:
             mock_config.return_value = MagicMock(node_did="")
             result = get_peer_exchange_protocol()
             assert result is not custom

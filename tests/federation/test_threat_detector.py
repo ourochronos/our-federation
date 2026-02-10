@@ -15,8 +15,8 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.models import NodeTrust, ThreatLevel
-from oro_federation.threat_detector import (
+from our_federation.models import NodeTrust, ThreatLevel
+from our_federation.threat_detector import (
     THREAT_THRESHOLDS,
     ThreatDetector,
 )
@@ -325,7 +325,7 @@ class TestApplyThreatResponse:
         node_trust.manual_trust_adjustment = 0.0
         detector.registry.get_node_trust.return_value = node_trust
 
-        with patch("oro_federation.threat_detector.get_cursor") as mock_cursor:
+        with patch("our_federation.threat_detector.get_cursor") as mock_cursor:
             mock_cur = MagicMock()
             mock_cursor.return_value.__enter__ = MagicMock(return_value=mock_cur)
             mock_cursor.return_value.__exit__ = MagicMock(return_value=False)
@@ -352,7 +352,7 @@ class TestApplyThreatResponse:
         node_trust.manual_trust_adjustment = 0.0
         detector.registry.get_node_trust.return_value = node_trust
 
-        with patch("oro_federation.threat_detector.get_cursor") as mock_cursor:
+        with patch("our_federation.threat_detector.get_cursor") as mock_cursor:
             mock_cur = MagicMock()
             mock_cursor.return_value.__enter__ = MagicMock(return_value=mock_cur)
             mock_cursor.return_value.__exit__ = MagicMock(return_value=False)
@@ -378,7 +378,7 @@ class TestApplyThreatResponse:
         node_trust.manual_trust_adjustment = -0.6  # Already has penalty
         detector.registry.get_node_trust.return_value = node_trust
 
-        with patch("oro_federation.threat_detector.get_cursor") as mock_cursor:
+        with patch("our_federation.threat_detector.get_cursor") as mock_cursor:
             mock_cur = MagicMock()
             mock_cursor.return_value.__enter__ = MagicMock(return_value=mock_cur)
             mock_cursor.return_value.__exit__ = MagicMock(return_value=False)
@@ -401,7 +401,7 @@ class TestApplyThreatResponse:
         node_trust.manual_trust_adjustment = 0.0
         detector.registry.get_node_trust.return_value = node_trust
 
-        with patch("oro_federation.threat_detector.get_cursor") as mock_cursor:
+        with patch("our_federation.threat_detector.get_cursor") as mock_cursor:
             mock_cursor.return_value.__enter__ = MagicMock(side_effect=Exception("DB connection failed"))
             mock_cursor.return_value.__exit__ = MagicMock(return_value=False)
 

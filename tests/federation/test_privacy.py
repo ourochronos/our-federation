@@ -18,7 +18,7 @@ from uuid import uuid4
 import numpy as np
 import pytest
 
-from oro_federation.privacy import (
+from our_federation.privacy import (
     DEFAULT_DELTA,
     DEFAULT_EPSILON,
     DEFAULT_MIN_CONTRIBUTORS,

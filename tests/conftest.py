@@ -1,4 +1,4 @@
-"""Global test fixtures for oro-federation test suite."""
+"""Global test fixtures for our-federation test suite."""
 
 from __future__ import annotations
 
@@ -81,7 +81,7 @@ def pytest_collection_modifyitems(config: pytest.Config, items: list[pytest.Item
 @pytest.fixture
 def clean_env(monkeypatch: pytest.MonkeyPatch) -> Any:
     """Remove all VKB_ and VALENCE_ environment variables."""
-    from oro_federation.config import clear_config_cache, clear_federation_config
+    from our_federation.config import clear_config_cache, clear_federation_config
 
     env_prefixes = ("VKB_", "VALENCE_", "OPENAI_")
     for key in list(os.environ.keys()):
@@ -112,7 +112,7 @@ def env_with_db_vars(monkeypatch: pytest.MonkeyPatch) -> Any:
 
 @pytest.fixture
 def mock_get_cursor() -> Any:
-    """Mock the get_cursor context manager from oro_db."""
+    """Mock the get_cursor context manager from our_db."""
     mock_cursor = MagicMock()
     mock_cursor.execute = MagicMock()
     mock_cursor.fetchone = MagicMock(return_value=None)
@@ -120,7 +120,7 @@ def mock_get_cursor() -> Any:
     mock_cursor.__enter__ = MagicMock(return_value=mock_cursor)
     mock_cursor.__exit__ = MagicMock(return_value=False)
 
-    with patch("oro_db.get_cursor", return_value=mock_cursor):
+    with patch("our_db.get_cursor", return_value=mock_cursor):
         yield mock_cursor
 
 

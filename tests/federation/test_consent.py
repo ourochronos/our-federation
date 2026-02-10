@@ -19,7 +19,7 @@ from uuid import uuid4
 import pytest
 
 # Import directly from module to avoid broken __init__.py imports (Issue #X - fix groups exports)
-from oro_federation.consent import (
+from our_federation.consent import (
     ConsentValidationResult,
     CrossFederationConsentChain,
     # Service
@@ -1916,7 +1916,7 @@ class TestConsentChainIntegration:
 
     def test_consent_chain_entry_cross_federation_fields(self) -> None:
         """Test ConsentChainEntry has cross-federation fields."""
-        from oro_privacy import ConsentChainEntry
+        from our_privacy import ConsentChainEntry
 
         chain = ConsentChainEntry(
             id="chain-1",
@@ -1938,8 +1938,8 @@ class TestConsentChainIntegration:
 
     def test_consent_chain_add_cross_federation_hop(self) -> None:
         """Test adding cross-federation hop to ConsentChainEntry."""
-        from oro_privacy import ConsentChainEntry
-        from oro_privacy import CrossFederationHop as LocalHop
+        from our_privacy import ConsentChainEntry
+        from our_privacy import CrossFederationHop as LocalHop
 
         chain = ConsentChainEntry(
             id="chain-1",
@@ -1973,7 +1973,7 @@ class TestConsentChainIntegration:
 
     def test_local_hop_serialization(self) -> None:
         """Test CrossFederationHop serialization in sharing module."""
-        from oro_privacy import CrossFederationHop as LocalHop
+        from our_privacy import CrossFederationHop as LocalHop
 
         hop = LocalHop(
             hop_id="hop-1",

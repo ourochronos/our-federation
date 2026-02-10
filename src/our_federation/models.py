@@ -12,7 +12,7 @@ from enum import StrEnum
 from typing import Any
 from uuid import UUID
 
-from oro_confidence import DimensionalConfidence
+from our_confidence import DimensionalConfidence
 
 # =============================================================================
 # ENUMS

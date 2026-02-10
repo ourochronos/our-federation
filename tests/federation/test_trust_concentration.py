@@ -18,12 +18,12 @@ from uuid import UUID, uuid4
 
 import pytest
 
-from oro_federation.models import (
+from our_federation.models import (
     TrustConcentrationReport,
     TrustConcentrationWarning,
     WarningSeverity,
 )
-from oro_federation.trust_policy import (
+from our_federation.trust_policy import (
     CONCENTRATION_THRESHOLDS,
     TrustPolicy,
 )
@@ -50,7 +50,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True) -> Generator:
         yield mock_cursor
 
-    with patch("oro_federation.trust_policy.get_cursor", _mock_get_cursor):
+    with patch("our_federation.trust_policy.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 

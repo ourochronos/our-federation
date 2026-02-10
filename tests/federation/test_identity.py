@@ -16,7 +16,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from oro_federation.identity import (
+from our_federation.identity import (
     CRYPTO_AVAILABLE,
     # DID
     DID,
@@ -912,7 +912,7 @@ class TestResolveDIDAsync:
         """User DID should resolve to node's document."""
         # Mock _resolve_web_did to return a document
         mock_doc = DIDDocument(id="did:vkb:web:example.com")
-        with patch("oro_federation.identity._resolve_web_did", return_value=mock_doc) as mock:
+        with patch("our_federation.identity._resolve_web_did", return_value=mock_doc) as mock:
             doc = await resolve_did("did:vkb:user:web:example.com:alice")
             mock.assert_called_once()
             assert doc == mock_doc
@@ -1127,18 +1127,18 @@ class TestCryptoNotAvailable:
 
     def test_sign_message_raises(self):
         """sign_message should raise without cryptography."""
-        with patch("oro_federation.identity.CRYPTO_AVAILABLE", False):
+        with patch("our_federation.identity.CRYPTO_AVAILABLE", False):
             with pytest.raises(NotImplementedError, match="requires cryptography"):
                 sign_message(b"test", b"\x00" * 32)
 
     def test_verify_signature_raises(self):
         """verify_signature should raise without cryptography."""
-        with patch("oro_federation.identity.CRYPTO_AVAILABLE", False):
+        with patch("our_federation.identity.CRYPTO_AVAILABLE", False):
             with pytest.raises(NotImplementedError, match="requires cryptography"):
                 verify_signature(b"test", b"\x00" * 64, "z6MkTest")
 
     def test_keypair_from_hex_raises(self):
         """KeyPair.from_private_key_hex should raise without cryptography."""
-        with patch("oro_federation.identity.CRYPTO_AVAILABLE", False):
+        with patch("our_federation.identity.CRYPTO_AVAILABLE", False):
             with pytest.raises(NotImplementedError, match="requires cryptography"):
                 KeyPair.from_private_key_hex("00" * 32)

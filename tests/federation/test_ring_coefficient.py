@@ -17,7 +17,7 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.ring_coefficient import (
+from our_federation.ring_coefficient import (
     MAX_NORMAL_VELOCITY,
     MIN_RING_COEFFICIENT,
     GraphAnalysisResult,
@@ -501,7 +501,7 @@ class TestModuleFunctions:
 
     def test_get_ring_coefficient_calculator(self):
         """Test getting default calculator instance."""
-        import oro_federation.ring_coefficient as rc
+        import our_federation.ring_coefficient as rc
 
         rc._default_calculator = None  # Reset
 
@@ -540,7 +540,7 @@ class TestIntegrationWithTrustPropagation:
 
     def test_ring_coefficient_applied_to_propagation(self, ring_graph, node_ids):
         """Test that ring coefficient is applied during trust propagation."""
-        from oro_federation.trust_propagation import TrustPropagation
+        from our_federation.trust_propagation import TrustPropagation
 
         def trust_getter(node_id, domain=None):
             edges = ring_graph.get(node_id, {})
@@ -569,7 +569,7 @@ class TestIntegrationWithTrustPropagation:
 
     def test_trust_propagation_result_includes_ring_info(self, ring_graph, node_ids):
         """Test that TransitiveTrustResult includes ring information."""
-        from oro_federation.trust_propagation import TrustPropagation
+        from our_federation.trust_propagation import TrustPropagation
 
         def trust_getter(node_id, domain=None):
             edges = ring_graph.get(node_id, {})
@@ -589,7 +589,7 @@ class TestIntegrationWithTrustPropagation:
 
     def test_direct_trust_not_affected_by_ring_coefficient(self, ring_graph, node_ids):
         """Test that direct trust is not subject to ring dampening."""
-        from oro_federation.trust_propagation import TrustPropagation
+        from our_federation.trust_propagation import TrustPropagation
 
         def trust_getter(node_id, domain=None):
             edges = ring_graph.get(node_id, {})
@@ -610,7 +610,7 @@ class TestIntegrationWithTrustPropagation:
 
     def test_record_trust_change_via_propagation_engine(self, node_ids):
         """Test recording trust changes through propagation engine."""
-        from oro_federation.trust_propagation import TrustPropagation
+        from our_federation.trust_propagation import TrustPropagation
 
         engine = TrustPropagation(apply_ring_coefficient=True)
 
@@ -619,7 +619,7 @@ class TestIntegrationWithTrustPropagation:
 
     def test_analyze_graph_via_propagation_engine(self, simple_graph, node_ids):
         """Test graph analysis through propagation engine."""
-        from oro_federation.trust_propagation import TrustPropagation
+        from our_federation.trust_propagation import TrustPropagation
 
         def trust_getter(node_id, domain=None):
             edges = simple_graph.get(node_id, {})

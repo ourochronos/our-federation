@@ -17,7 +17,7 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.challenges import (
+from our_federation.challenges import (
     DEFAULT_REVIEWER_CONFIG,
     # Appeals
     AppealHandler,

@@ -18,12 +18,12 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.models import (
+from our_federation.models import (
     NodeStatus,
     ThreatLevel,
     TrustPhase,
 )
-from oro_federation.tools import (
+from our_federation.tools import (
     FEDERATION_TOOL_HANDLERS,
     FEDERATION_TOOLS,
     federation_belief_query,
@@ -64,7 +64,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True) -> Generator:
         yield mock_cursor
 
-    with patch("oro_federation.tools.get_cursor", _mock_get_cursor):
+    with patch("our_federation.tools.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 
@@ -172,8 +172,8 @@ class TestFederationNodeDiscover:
         did_doc = sample_did_document()
 
         with (
-            patch("oro_federation.tools.discover_node_sync") as mock_discover,
-            patch("oro_federation.tools.register_node") as mock_register,
+            patch("our_federation.tools.discover_node_sync") as mock_discover,
+            patch("our_federation.tools.register_node") as mock_register,
         ):
             mock_discover.return_value = did_doc
             mock_node = MagicMock()
@@ -191,7 +191,7 @@ class TestFederationNodeDiscover:
 
     def test_discover_node_not_found(self):
         """Test node discovery when node not found."""
-        with patch("oro_federation.tools.discover_node_sync") as mock_discover:
+        with patch("our_federation.tools.discover_node_sync") as mock_discover:
             mock_discover.return_value = None
 
             result = federation_node_discover("https://nonexistent.example.com")
@@ -203,7 +203,7 @@ class TestFederationNodeDiscover:
         """Test node discovery without auto-registration."""
         did_doc = sample_did_document()
 
-        with patch("oro_federation.tools.discover_node_sync") as mock_discover:
+        with patch("our_federation.tools.discover_node_sync") as mock_discover:
             mock_discover.return_value = did_doc
 
             result = federation_node_discover("https://test.example.com", auto_register=False)
@@ -214,7 +214,7 @@ class TestFederationNodeDiscover:
 
     def test_discover_node_error(self):
         """Test node discovery with error."""
-        with patch("oro_federation.tools.discover_node_sync") as mock_discover:
+        with patch("our_federation.tools.discover_node_sync") as mock_discover:
             mock_discover.side_effect = Exception("Network error")
 
             result = federation_node_discover("https://test.example.com")
@@ -233,7 +233,7 @@ class TestFederationNodeList:
             (sample_node(did="did:vkb:web:node2.example.com"), sample_node_trust()),
         ]
 
-        with patch("oro_federation.tools.list_nodes_with_trust") as mock_list:
+        with patch("our_federation.tools.list_nodes_with_trust") as mock_list:
             mock_list.return_value = nodes_with_trust
 
             result = federation_node_list(include_trust=True)
@@ -245,7 +245,7 @@ class TestFederationNodeList:
         """Test listing nodes without trust info."""
         nodes = [sample_node(), sample_node()]
 
-        with patch("oro_federation.tools.list_nodes") as mock_list:
+        with patch("our_federation.tools.list_nodes") as mock_list:
             mock_list.return_value = nodes
 
             result = federation_node_list(include_trust=False)
@@ -257,7 +257,7 @@ class TestFederationNodeList:
         """Test listing nodes with status/phase filters."""
         nodes_with_trust = [(sample_node(status=NodeStatus.ACTIVE), sample_node_trust())]
 
-        with patch("oro_federation.tools.list_nodes_with_trust") as mock_list:
+        with patch("our_federation.tools.list_nodes_with_trust") as mock_list:
             mock_list.return_value = nodes_with_trust
 
             result = federation_node_list(status="active", trust_phase="contributor")
@@ -266,7 +266,7 @@ class TestFederationNodeList:
 
     def test_list_nodes_error(self):
         """Test listing nodes with error."""
-        with patch("oro_federation.tools.list_nodes_with_trust") as mock_list:
+        with patch("our_federation.tools.list_nodes_with_trust") as mock_list:
             mock_list.side_effect = Exception("DB error")
 
             result = federation_node_list()
@@ -283,9 +283,9 @@ class TestFederationNodeGet:
         trust = sample_node_trust()
 
         with (
-            patch("oro_federation.tools.get_node_by_id") as mock_get_node,
-            patch("oro_federation.tools.get_trust_manager") as mock_get_mgr,
-            patch("oro_federation.tools.get_sync_state") as mock_get_sync,
+            patch("our_federation.tools.get_node_by_id") as mock_get_node,
+            patch("our_federation.tools.get_trust_manager") as mock_get_mgr,
+            patch("our_federation.tools.get_sync_state") as mock_get_sync,
         ):
             mock_get_node.return_value = node
             mock_mgr = MagicMock()
@@ -306,9 +306,9 @@ class TestFederationNodeGet:
         node = sample_node()
 
         with (
-            patch("oro_federation.tools.get_node_by_did") as mock_get_node,
-            patch("oro_federation.tools.get_trust_manager") as mock_get_mgr,
-            patch("oro_federation.tools.get_sync_state") as mock_get_sync,
+            patch("our_federation.tools.get_node_by_did") as mock_get_node,
+            patch("our_federation.tools.get_trust_manager") as mock_get_mgr,
+            patch("our_federation.tools.get_sync_state") as mock_get_sync,
         ):
             mock_get_node.return_value = node
             mock_mgr = MagicMock()
@@ -323,7 +323,7 @@ class TestFederationNodeGet:
 
     def test_get_node_not_found(self):
         """Test getting non-existent node."""
-        with patch("oro_federation.tools.get_node_by_id") as mock_get_node:
+        with patch("our_federation.tools.get_node_by_id") as mock_get_node:
             mock_get_node.return_value = None
 
             result = federation_node_get(node_id=str(uuid4()))
@@ -342,7 +342,7 @@ class TestFederationBootstrap:
             sample_node(did="did:vkb:web:node2.example.com"),
         ]
 
-        with patch("oro_federation.tools.bootstrap_federation_sync") as mock_bootstrap:
+        with patch("our_federation.tools.bootstrap_federation_sync") as mock_bootstrap:
             mock_bootstrap.return_value = nodes
 
             result = federation_bootstrap(["https://node1.example.com", "https://node2.example.com"])
@@ -352,7 +352,7 @@ class TestFederationBootstrap:
 
     def test_bootstrap_error(self):
         """Test bootstrap with error."""
-        with patch("oro_federation.tools.bootstrap_federation_sync") as mock_bootstrap:
+        with patch("our_federation.tools.bootstrap_federation_sync") as mock_bootstrap:
             mock_bootstrap.side_effect = Exception("Connection failed")
 
             result = federation_bootstrap(["https://node.example.com"])
@@ -372,7 +372,7 @@ class TestFederationTrustGet:
         """Test getting node trust."""
         node_id = uuid4()
 
-        with patch("oro_federation.tools.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.tools.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_mgr.get_effective_trust.return_value = 0.7
             mock_mgr.get_node_trust.return_value = sample_node_trust()
@@ -389,7 +389,7 @@ class TestFederationTrustGet:
         """Test getting domain-specific trust."""
         node_id = uuid4()
 
-        with patch("oro_federation.tools.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.tools.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_mgr.get_effective_trust.return_value = 0.8
             mock_get_mgr.return_value = mock_mgr
@@ -401,7 +401,7 @@ class TestFederationTrustGet:
 
     def test_get_trust_error(self):
         """Test getting trust with error."""
-        with patch("oro_federation.tools.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.tools.get_trust_manager") as mock_get_mgr:
             mock_get_mgr.side_effect = Exception("Invalid UUID")
 
             result = federation_trust_get("invalid-uuid")
@@ -416,7 +416,7 @@ class TestFederationTrustSetPreference:
         """Test setting trust preference."""
         node_id = uuid4()
 
-        with patch("oro_federation.tools.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.tools.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_pref = MagicMock()
             mock_pref.to_dict.return_value = {"preference": "elevated"}
@@ -433,7 +433,7 @@ class TestFederationTrustSetPreference:
         """Test blocking a node."""
         node_id = uuid4()
 
-        with patch("oro_federation.tools.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.tools.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_pref = MagicMock()
             mock_pref.to_dict.return_value = {"preference": "blocked"}
@@ -450,7 +450,7 @@ class TestFederationTrustSetPreference:
         """Test failed preference setting."""
         node_id = uuid4()
 
-        with patch("oro_federation.tools.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.tools.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_mgr.set_user_preference.return_value = None
             mock_get_mgr.return_value = mock_mgr
@@ -467,7 +467,7 @@ class TestFederationTrustAssess:
         """Test assessing node with no threat."""
         node_id = uuid4()
 
-        with patch("oro_federation.tools.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.tools.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_mgr.assess_threat_level.return_value = (
                 ThreatLevel.NONE,
@@ -485,7 +485,7 @@ class TestFederationTrustAssess:
         """Test assessing and applying threat response."""
         node_id = uuid4()
 
-        with patch("oro_federation.tools.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.tools.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_mgr.assess_threat_level.return_value = (
                 ThreatLevel.MEDIUM,
@@ -521,7 +521,7 @@ class TestFederationBeliefShare:
             "share_level": "belief_only",
         }
 
-        with patch("oro_federation.tools.queue_belief_for_sync") as mock_queue:
+        with patch("our_federation.tools.queue_belief_for_sync") as mock_queue:
             mock_queue.return_value = True
 
             result = federation_belief_share(str(belief_id), visibility="federated", share_level="belief_only")
@@ -591,7 +591,7 @@ class TestFederationSyncTrigger:
 
     def test_trigger_sync_all(self):
         """Test triggering sync for all nodes."""
-        with patch("oro_federation.tools.trigger_sync") as mock_trigger:
+        with patch("our_federation.tools.trigger_sync") as mock_trigger:
             mock_trigger.return_value = {"success": True}
 
             result = federation_sync_trigger()
@@ -602,7 +602,7 @@ class TestFederationSyncTrigger:
         """Test triggering sync for specific node."""
         node_id = uuid4()
 
-        with patch("oro_federation.tools.trigger_sync") as mock_trigger:
+        with patch("our_federation.tools.trigger_sync") as mock_trigger:
             mock_trigger.return_value = {
                 "success": True,
                 "synced_with": "did:vkb:web:test",
@@ -614,7 +614,7 @@ class TestFederationSyncTrigger:
 
     def test_trigger_sync_error(self):
         """Test triggering sync with error."""
-        with patch("oro_federation.tools.trigger_sync") as mock_trigger:
+        with patch("our_federation.tools.trigger_sync") as mock_trigger:
             mock_trigger.side_effect = Exception("Network error")
 
             result = federation_sync_trigger()
@@ -627,7 +627,7 @@ class TestFederationSyncStatus:
 
     def test_get_sync_status_overall(self):
         """Test getting overall sync status."""
-        with patch("oro_federation.tools.get_sync_status") as mock_status:
+        with patch("our_federation.tools.get_sync_status") as mock_status:
             mock_status.return_value = {
                 "total_nodes": 5,
                 "syncing": 1,
@@ -643,7 +643,7 @@ class TestFederationSyncStatus:
         """Test getting sync status for specific node."""
         node_id = uuid4()
 
-        with patch("oro_federation.tools.get_sync_state") as mock_state:
+        with patch("our_federation.tools.get_sync_state") as mock_state:
             mock_sync_state = MagicMock()
             mock_sync_state.to_dict.return_value = {"status": "idle"}
             mock_state.return_value = mock_sync_state
@@ -655,7 +655,7 @@ class TestFederationSyncStatus:
 
     def test_get_sync_status_node_not_found(self):
         """Test getting sync status for non-existent node."""
-        with patch("oro_federation.tools.get_sync_state") as mock_state:
+        with patch("our_federation.tools.get_sync_state") as mock_state:
             mock_state.return_value = None
 
             result = federation_sync_status(node_id=str(uuid4()))
@@ -683,9 +683,9 @@ class TestFederationCorroborationCheck:
         mock_corr.sources = ["did:vkb:web:node1", "did:vkb:web:node2"]
 
         # Need to mock the import inside the function
-        import oro_federation.corroboration
+        import our_federation.corroboration
 
-        with patch.object(oro_federation.corroboration, "get_corroboration", return_value=mock_corr):
+        with patch.object(our_federation.corroboration, "get_corroboration", return_value=mock_corr):
             result = federation_corroboration_check(belief_id=str(belief_id))
 
             assert result["success"] is True
@@ -694,9 +694,9 @@ class TestFederationCorroborationCheck:
 
     def test_check_corroboration_belief_not_found(self):
         """Test checking corroboration for non-existent belief."""
-        import oro_federation.corroboration
+        import our_federation.corroboration
 
-        with patch.object(oro_federation.corroboration, "get_corroboration", return_value=None):
+        with patch.object(our_federation.corroboration, "get_corroboration", return_value=None):
             result = federation_corroboration_check(belief_id=str(uuid4()))
 
             assert result["success"] is False
@@ -780,7 +780,7 @@ class TestHandleFederationTool:
 
     def test_route_to_known_handler(self):
         """Test routing to a known handler."""
-        with patch("oro_federation.tools.get_sync_status") as mock_handler:
+        with patch("our_federation.tools.get_sync_status") as mock_handler:
             mock_handler.return_value = {"total_nodes": 0}
 
             result = handle_federation_tool("federation_sync_status", {})
@@ -796,7 +796,7 @@ class TestHandleFederationTool:
 
     def test_route_with_arguments(self):
         """Test routing with arguments."""
-        with patch("oro_federation.tools.get_trust_manager") as mock_get_mgr:
+        with patch("our_federation.tools.get_trust_manager") as mock_get_mgr:
             mock_mgr = MagicMock()
             mock_mgr.get_effective_trust.return_value = 0.5
             mock_get_mgr.return_value = mock_mgr

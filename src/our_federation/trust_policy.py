@@ -14,7 +14,7 @@ from datetime import datetime, timedelta
 from typing import Any
 from uuid import UUID
 
-from oro_db import get_cursor
+from our_db import get_cursor
 
 from .models import (
     NodeTrust,

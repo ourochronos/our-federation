@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "oro-federation"
+name = "our-federation"
 version = "0.1.0"
 description = "P2P federation protocol, peer sync, consent, trust propagation"
 readme = "README.md"
@@ -20,12 +20,12 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
 ]
 dependencies = [
-    "oro-db>=0.1.0",
-    "oro-models>=0.1.0",
-    "oro-confidence>=0.1.0",
-    "oro-privacy>=0.1.0",
-    "oro-embeddings>=0.1.0",
-    "oro-compliance>=0.1.0",
+    "our-db>=0.1.0",
+    "our-models>=0.1.0",
+    "our-confidence>=0.1.0",
+    "our-privacy>=0.1.0",
+    "our-embeddings>=0.1.0",
+    "our-compliance>=0.1.0",
     "cryptography>=41.0",
     "pydantic>=2.0",
     "pydantic-settings>=2.0",
@@ -47,7 +47,7 @@ dev = [
 ]
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/oro_federation"]
+packages = ["src/our_federation"]
 
 [tool.ruff]
 target-version = "py311"
@@ -67,7 +67,7 @@ ignore = [
 ]
 
 [tool.ruff.lint.isort]
-known-first-party = ["oro_federation"]
+known-first-party = ["our_federation"]
 
 [tool.mypy]
 python_version = "3.11"
@@ -87,7 +87,7 @@ markers = [
 
 [tool.coverage.run]
 branch = true
-source = ["src/oro_federation"]
+source = ["src/our_federation"]
 
 [tool.coverage.report]
 show_missing = true

@@ -278,7 +278,7 @@ class TrustPropagation:
         Override or inject a custom getter for testing.
         """
         # Import here to avoid circular imports
-        from oro_db import get_cursor
+        from our_db import get_cursor
 
         try:
             with get_cursor() as cur:

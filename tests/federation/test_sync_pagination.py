@@ -19,7 +19,7 @@ from uuid import uuid4
 
 import pytest
 
-from oro_federation.protocol import (
+from our_federation.protocol import (
     BeliefsResponse,
     ErrorCode,
     ErrorMessage,
@@ -55,7 +55,7 @@ def mock_get_cursor(mock_cursor):
     def _mock_get_cursor(dict_cursor: bool = True) -> Generator:
         yield mock_cursor
 
-    with patch("oro_federation.protocol.get_cursor", _mock_get_cursor):
+    with patch("our_federation.protocol.get_cursor", _mock_get_cursor):
         yield mock_cursor
 
 
@@ -236,7 +236,7 @@ class TestHandleSyncRequestPagination:
             federation_node_did="did:vkb:web:local",
             federation_private_key=None,
         )
-        with patch("oro_federation.config.get_federation_config", return_value=mock_config):
+        with patch("our_federation.config.get_federation_config", return_value=mock_config):
             return handle_sync_request(request, node_id, trust)
 
     def test_empty_result_no_cursor(self, mock_get_cursor):
@@ -445,7 +445,7 @@ class TestHandleRequestBeliefsPagination:
             federation_node_did="did:vkb:web:local",
             federation_private_key=None,
         )
-        with patch("oro_federation.config.get_federation_config", return_value=mock_config):
+        with patch("our_federation.config.get_federation_config", return_value=mock_config):
             return handle_request_beliefs(request, node_id, trust)
 
     def test_no_cursor_returns_first_page(self, mock_get_cursor):

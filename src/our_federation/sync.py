@@ -28,9 +28,9 @@ from urllib.parse import urlparse
 from uuid import UUID, uuid4
 
 import aiohttp
-from oro_db import get_cursor
+from our_db import get_cursor
 
-from oro_federation.config import get_config, get_federation_config
+from our_federation.config import get_config, get_federation_config
 
 from .discovery import (
     get_node_by_id,
@@ -634,9 +634,9 @@ class SyncManager:
 
     def _belief_to_federated(self, row: dict[str, Any]) -> dict[str, Any] | None:
         """Convert a belief row to federated format with federation-standard embedding."""
-        from oro_embeddings.providers.local import generate_embedding
+        from our_embeddings.providers.local import generate_embedding
 
-        from oro_federation.federation_embedding import (
+        from our_federation.federation_embedding import (
             FEDERATION_EMBEDDING_DIMS,
             FEDERATION_EMBEDDING_MODEL,
             FEDERATION_EMBEDDING_TYPE,

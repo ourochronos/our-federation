@@ -87,7 +87,7 @@ class TrustRegistry:
         if path:
             self._path = Path(path)
         else:
-            from oro_federation.config import get_config
+            from our_federation.config import get_config
 
             config = get_config()
             self._path = Path(config.trust_registry_path) if config.trust_registry_path else self.DEFAULT_PATH
@@ -361,7 +361,7 @@ def export_beliefs(
     Returns:
         ExportPackage ready to serialize and share
     """
-    from oro_db import get_cursor
+    from our_db import get_cursor
 
     registry = get_trust_registry()
     local_did = registry.local_did or "did:vkb:web:localhost"
@@ -480,7 +480,7 @@ def import_beliefs(
     Returns:
         ImportResult with statistics
     """
-    from oro_db import get_cursor
+    from our_db import get_cursor
 
     registry = get_trust_registry()
 
@@ -631,13 +631,13 @@ def query_federated(
     Returns:
         List of FederatedQueryResult with source attribution
     """
-    from oro_db import get_cursor
+    from our_db import get_cursor
 
     # Generate embedding
     try:
         from openai import OpenAI
 
-        from oro_federation.config import get_config
+        from our_federation.config import get_config
 
         config = get_config()
         client = OpenAI(api_key=config.openai_api_key)
