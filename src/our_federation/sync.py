@@ -443,12 +443,12 @@ def mark_sync_item_failed(item_id: UUID, error: str) -> bool:
 class SyncManager:
     """Manages synchronization with federation peers."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.settings = get_federation_config()
         self._running = False
         self._sync_task: asyncio.Task | None = None
 
-    async def start(self):
+    async def start(self) -> None:
         """Start the sync manager."""
         if self._running:
             return
@@ -457,7 +457,7 @@ class SyncManager:
         self._sync_task = asyncio.create_task(self._sync_loop())
         logger.info("Sync manager started")
 
-    async def stop(self):
+    async def stop(self) -> None:
         """Stop the sync manager."""
         self._running = False
         if self._sync_task:
@@ -468,7 +468,7 @@ class SyncManager:
                 pass
         logger.info("Sync manager stopped")
 
-    async def _sync_loop(self):
+    async def _sync_loop(self) -> None:
         """Main sync loop."""
         while self._running:
             try:
@@ -480,7 +480,7 @@ class SyncManager:
             # Wait for next sync interval
             await asyncio.sleep(self.settings.federation_sync_interval_seconds)
 
-    async def _process_outbound_queue(self):
+    async def _process_outbound_queue(self) -> None:
         """Process the outbound sync queue."""
         # Get all active nodes
         with get_cursor() as cur:
@@ -523,7 +523,7 @@ class SyncManager:
         node_id: UUID,
         federation_endpoint: str,
         items: list[dict[str, Any]],
-    ):
+    ) -> None:
         """Send beliefs to a specific node.
 
         Args:
@@ -710,7 +710,7 @@ class SyncManager:
 
         return result
 
-    async def _sync_with_peers(self):
+    async def _sync_with_peers(self) -> None:
         """Pull sync updates from active peers."""
         with get_cursor() as cur:
             cur.execute(
@@ -750,7 +750,7 @@ class SyncManager:
         trust_level: float,
         cursor: str | None,
         last_sync: datetime | None,
-    ):
+    ) -> None:
         """Pull updates from a specific node.
 
         Args:

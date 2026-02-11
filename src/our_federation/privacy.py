@@ -782,7 +782,7 @@ class DatabaseBudgetStore:
             get = row.get
         else:
 
-            def get(k, d=None):
+            def get(k: str, d: Any = None) -> Any:
                 return getattr(row, k, d)
 
         # Parse JSONB fields

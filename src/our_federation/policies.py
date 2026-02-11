@@ -66,7 +66,7 @@ class ThresholdPolicy:
     timeout: timedelta = field(default_factory=lambda: timedelta(hours=24))
     id: UUID = field(default_factory=uuid4)
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Validate policy configuration."""
         # Ensure admin_dids is a set first
         if not isinstance(self.admin_dids, set):
@@ -122,7 +122,7 @@ class PendingApproval:
     executed_at: datetime | None = None
     result: Any = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Ensure approved_by is a set."""
         if not isinstance(self.approved_by, set):
             self.approved_by = set(self.approved_by)
@@ -152,7 +152,7 @@ class PolicyManager:
     execution when thresholds are met.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the policy manager."""
         self._policies: dict[Operation, ThresholdPolicy] = {}
         self._pending: dict[UUID, PendingApproval] = {}

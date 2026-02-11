@@ -29,6 +29,7 @@ from .models import (
     NodeTrust,
     ThreatLevel,
     TrustAttestation,
+    TrustConcentrationReport,
     TrustPhase,
     TrustPreference,
     UserNodeTrust,
@@ -333,7 +334,7 @@ class TrustManager:
     def check_trust_concentration(
         self,
         thresholds: dict[str, float] | None = None,
-    ):
+    ) -> TrustConcentrationReport:
         """Check for trust concentration issues in the network.
 
         Detects when trust is too concentrated in few nodes.
@@ -503,7 +504,7 @@ def assess_and_respond_to_threat(
 
 def check_trust_concentration(
     thresholds: dict[str, float] | None = None,
-):
+) -> TrustConcentrationReport:
     """Check for trust concentration issues in the network (convenience function).
 
     Args:

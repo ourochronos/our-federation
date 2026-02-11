@@ -259,7 +259,7 @@ class DomainChallenge:
     dns_subdomain: str = DNS_CHALLENGE_SUBDOMAIN
     dns_txt_value: str = ""
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Set up DNS values after initialization."""
         if not self.dns_txt_value:
             self.dns_txt_value = f"{CHALLENGE_PREFIX}{self.token}"
@@ -351,7 +351,7 @@ class DomainAttestation:
     # Chain for transitive attestations
     chain: list[str] | None = None
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         """Set default expiration."""
         if not self.expires_at:
             self.expires_at = self.created_at + timedelta(days=ATTESTATION_VALIDITY_DAYS)
@@ -412,7 +412,7 @@ class ChallengeStore:
     In production, this would be backed by a database.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the challenge store."""
         self._challenges: dict[str, DomainChallenge] = {}
         self._by_domain: dict[str, list[str]] = {}  # domain -> challenge_ids
@@ -474,7 +474,7 @@ class AttestationStore:
     In production, this would be backed by a database.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         """Initialize the attestation store."""
         self._attestations: dict[str, DomainAttestation] = {}
         self._by_domain: dict[str, list[str]] = {}  # domain -> attestation_ids

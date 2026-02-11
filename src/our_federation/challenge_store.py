@@ -22,7 +22,7 @@ from datetime import datetime
 try:
     import redis
 except ImportError:  # pragma: no cover
-    redis = None  # type: ignore[assignment]
+    redis = None
 
 logger = logging.getLogger(__name__)
 
