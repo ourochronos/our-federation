@@ -15,6 +15,10 @@ concurrency:
 jobs:
   lint:
     uses: ourochronos/our-infra/.github/workflows/lint.yml@main
+    with:
+      extra-install: "git+https://github.com/ourochronos/our-db.git git+https://github.com/ourochronos/our-confidence.git git+https://github.com/ourochronos/our-models.git git+https://github.com/ourochronos/our-privacy.git git+https://github.com/ourochronos/our-embeddings.git git+https://github.com/ourochronos/our-compliance.git"
   test:
     needs: lint
     uses: ourochronos/our-infra/.github/workflows/test.yml@main
+    with:
+      extra-install: "git+https://github.com/ourochronos/our-db.git git+https://github.com/ourochronos/our-confidence.git git+https://github.com/ourochronos/our-models.git git+https://github.com/ourochronos/our-privacy.git git+https://github.com/ourochronos/our-embeddings.git git+https://github.com/ourochronos/our-compliance.git"
